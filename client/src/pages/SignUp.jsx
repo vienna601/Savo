@@ -20,7 +20,7 @@ const SignupPage = () => {
     const handleAuth = async () => {
       try {
         const token = await getAccessTokenSilently();
-        await fetch("http://localhost:8000/auth/", {
+        await fetch("http://localhost:8000/api", {
           headers: { Authorization: `Bearer ${token}` },
         });
         //go to dashboard after successful signup/login
