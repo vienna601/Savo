@@ -1,0 +1,228 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+.signup-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.signup-wrapper {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.signup-left {
+  width: 50%;
+  height: 100vh;
+  background: #403747;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5%;
+  box-sizing: border-box;
+}
+
+.signup-title {
+  color: #FFF;
+  font-family: 'Quicksand', sans-serif;
+  font-size: clamp(40px, 6vw, 60px);
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin-bottom: clamp(30px, 4vh, 50px);
+}
+
+.logo-image {
+  width: clamp(100px, 12%, 140px);
+  height: auto;
+  margin-bottom: clamp(20px, 3vh, 30px);
+  object-fit: contain;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(20px, 2.5vh, 30px);
+  width: 100%;
+}
+
+.signup-input {
+  width: clamp(320px, 60%, 450px);
+  height: clamp(60px, 8vh, 75px);
+  flex-shrink: 0;
+  background: #ECE8E8;
+  opacity: 0.75;
+  border: none;
+  padding: 0 25px;
+  box-sizing: border-box;
+  font-family: 'Quicksand', sans-serif;
+  font-size: clamp(18px, 2.2vw, 22px);
+  border-radius: 12px;
+}
+
+.signup-input::placeholder {
+  color: #666;
+  font-family: 'Quicksand', sans-serif;
+}
+
+.signup-input:focus {
+  outline: none;
+  opacity: 1;
+}
+
+.sign-up-button {
+  width: clamp(150px, 30%, 200px);
+  height: clamp(55px, 7vh, 70px);
+  flex-shrink: 0;
+  border-radius: 66.5px;
+  background: #8F7E9C;
+  border: none;
+  cursor: pointer;
+  margin-top: clamp(10px, 1.5vh, 20px);
+  transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sign-up-button:hover {
+  background: #7d6c8a;
+}
+
+.sign-up-button:active {
+  transform: scale(0.98);
+}
+
+.button-text {
+  color: #FFF;
+  font-family: 'Quicksand', sans-serif;
+  font-size: clamp(18px, 2.5vw, 26px);
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.warning-message {
+  color: #d32f2f;
+  font-family: 'Quicksand', sans-serif;
+  font-size: clamp(14px, 1.8vw, 18px);
+  margin-top: 10px;
+  min-height: 20px;
+}
+
+.signup-right {
+  width: 50%;
+  height: 100vh;
+  flex-shrink: 0;
+  background: #CFB5E6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5%;
+  box-sizing: border-box;
+}
+
+.login-title {
+  color: #FFF;
+  text-align: center;
+  font-family: 'Quicksand', sans-serif;
+  font-size: clamp(40px, 6vw, 60px);
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin-bottom: clamp(15px, 2.5vh, 25px);
+}
+
+.login-description {
+  color: #FFF;
+  text-align: center;
+  font-family: 'Quicksand', sans-serif;
+  font-size: clamp(18px, 3vw, 28px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: clamp(30px, 4vh, 50px);
+  max-width: 80%;
+}
+
+.login-button {
+  width: clamp(150px, 30%, 200px);
+  height: clamp(55px, 7vh, 70px);
+  flex-shrink: 0;
+  border-radius: 66.5px;
+  background: #A58EB6;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-button:hover {
+  background: #947ca4;
+}
+
+.login-button:active {
+  transform: scale(0.98);
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 18px;
+  color: #403747;
+}
+
+@media (max-width: 1024px) {
+  .signup-wrapper {
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    max-width: 500px;
+  }
+
+  .signup-left,
+  .signup-right {
+    width: 100%;
+    height: auto;
+    min-height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .signup-title,
+  .login-title {
+    font-size: 32px;
+  }
+
+  .login-description {
+    font-size: 16px;
+  }
+
+  .signup-input {
+    width: 80%;
+    max-width: 250px;
+  }
+}

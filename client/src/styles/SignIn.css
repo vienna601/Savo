@@ -1,7 +1,5 @@
-/* Import Quicksand font */
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
 
-/* Reset and prevent scrolling */
 * {
   margin: 0;
   padding: 0;
@@ -14,7 +12,6 @@ body, html {
   width: 100vw;
 }
 
-/* Main container */
 .login-container {
   display: flex;
   height: 100vh;
@@ -29,7 +26,6 @@ body, html {
   overflow: hidden;
 }
 
-/* Left side - Sign in */
 .login-left {
   width: 50%;
   height: 100vh;
@@ -131,7 +127,6 @@ body, html {
   min-height: 20px;
 }
 
-/* Right side - Sign up */
 .login-right {
   width: 50%;
   height: 100vh;
@@ -190,7 +185,6 @@ body, html {
   transform: scale(0.98);
 }
 
-/* Loading state */
 .loading-container {
   display: flex;
   justify-content: center;
@@ -201,7 +195,6 @@ body, html {
   color: #403747;
 }
 
-/* Responsive design */
 @media (max-width: 1024px) {
   .login-wrapper {
     flex-direction: column;
