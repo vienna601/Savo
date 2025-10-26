@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
+import "../styles/SignIn.css";
 
 const LoginPage = () => {
   const {
@@ -74,20 +75,42 @@ const LoginPage = () => {
     );
   }
 
-  return (
-    <div>
-      <h1>Savo</h1>
-      <h2>Sign in to Savo</h2>
-      {/*placeholder input fields*/}
-      <input type="email" placeholder="Email" />
-      <input type="password" placeholder="Password" />
-      <button onClick={handleSignIn}>SIGN IN</button>
-      {/*display warning message if any*/}
-      <p>{warning}</p>
-      {/*signup redirect option*/}
-      <h2>Hello, Friend!</h2>
-      <p>Create your profile and start your journey with us</p>
-      <button onClick={handleSignUp}>SIGN UP</button>
+   return (
+    <div className="login-container">
+      <div className="login-wrapper">
+        <div className="login-left">
+          <img 
+            src="/src/assets/logo.png" 
+            alt="Logo" 
+            className="logo-image"
+          />
+          <h1 className="login-title">Sign in</h1>
+          <div className="login-form">
+            <input 
+              type="email" 
+              placeholder="Email" 
+              className="login-input"
+            />
+            <input 
+              type="password" 
+              placeholder="Password" 
+              className="login-input"
+            />
+            <button onClick={handleSignIn} className="sign-in-button">
+              <span className="button-text">Sign in</span>
+            </button>
+            {warning && <p className="warning-message">{warning}</p>}
+          </div>
+        </div>
+
+        <div className="login-right">
+          <h2 className="signup-title">Meet your robot buddy!</h2>
+          <p className="signup-description">Create your profile and start your journey with us</p>
+          <button onClick={handleSignUp} className="sign-up-button">
+            <span className="button-text">Sign up</span>
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
