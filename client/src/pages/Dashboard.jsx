@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import {
   Layout,
@@ -18,6 +18,10 @@ import {
 } from "recharts";
 import "../styles/Dashboard.css";
 
+// Example emotions list
+const EMOTIONS = ["Happy", "Sad", "Angry", "Fearful", "Neutral"];
+const COLORS = ["#4CAF50", "#2196F3", "#FFC107", "#F44336", "#9E9E9E"];
+
 const Dashboard = () => {
   const { user, logout } = useAuth0();
 
@@ -25,37 +29,36 @@ const Dashboard = () => {
     logout({ returnTo: window.location.origin });
   };
 
-  // Example data — replace later with your actual emotion averages
-  const dailyData = [
-    { name: "Happy", value: 35 },
-    { name: "Sad", value: 25 },
-    { name: "Angry", value: 10 },
-    { name: "Fearful", value: 15 },
-    { name: "Neutral", value: 15 },
-  ];
+  // State for dynamic chart data
+  const [dailyData, setDailyData] = useState([]);
+  const [weeklyData, setWeeklyData] = useState([]);
+  const [monthlyData, setMonthlyData] = useState([]);
 
-  const weeklyData = [
-    { name: "Happy", value: 40 },
-    { name: "Sad", value: 20 },
-    { name: "Angry", value: 15 },
-    { name: "Fearful", value: 10 },
-    { name: "Neutral", value: 15 },
-  ];
+  // Example: simulate fetching emotional averages
+  const fetchEmotionData = () => {
+    // Here, replace this with real API or localStorage data
+    const randomData = () =>
+      EMOTIONS.map((name) => ({
+        name,
+        value: Math.floor(Math.random() * 50) + 5,
+      }));
 
-  const monthlyData = [
-    { name: "Happy", value: 45 },
-    { name: "Sad", value: 15 },
-    { name: "Angry", value: 10 },
-    { name: "Fearful", value: 10 },
-    { name: "Neutral", value: 20 },
-  ];
+    setDailyData(randomData());
+    setWeeklyData(randomData());
+    setMonthlyData(randomData());
+  };
 
-  const COLORS = ["#4CAF50", "#2196F3", "#FFC107", "#F44336", "#9E9E9E"];
+  // Update charts every 10 seconds
+  useEffect(() => {
+    fetchEmotionData(); // Initial fetch
+    const intervalId = setInterval(fetchEmotionData, 10000); // every 10s
+    return () => clearInterval(intervalId); // cleanup
+  }, []);
 
   const renderPieChart = (title, data) => (
     <div className="chart-card">
       <h3>{title}</h3>
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height={240}>
         <PieChart>
           <Pie
             data={data}

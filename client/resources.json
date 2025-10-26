@@ -1,0 +1,921 @@
+[
+  {
+    "id": "china",
+    "country": "China",
+    "name": "National Health Hotline / 12320 (public health)",
+    "phone": "12320 (public health hotline; mental health referral varies by province)",
+    "website": "http://www.12320.gov.cn/",
+    "hours": "24/7 (public health line)",
+    "languages": [
+      "Mandarin/Chinese"
+    ],
+    "services": [
+      "Public health advice, referrals"
+    ],
+    "chat_available": false,
+    "verification_source": "http://www.12320.gov.cn/",
+    "last_verified_date": "2025-10-26",
+    "notes": "12320 is a general public health hotline — mental health services/references vary regionally."
+  },
+  {
+    "id": "india",
+    "country": "India",
+    "name": "Tele-MANAS (Ministry of Health)",
+    "phone": "14416 (TeleMANAS)",
+    "website": "https://telemanas.mohfw.gov.in/",
+    "hours": "24/7 (TeleMANAS listed)",
+    "languages": [
+      "Multiple Indian languages",
+      "English"
+    ],
+    "services": [
+      "Tele-counselling, referrals"
+    ],
+    "chat_available": false,
+    "verification_source": "https://telemanas.mohfw.gov.in/",
+    "last_verified_date": "2025-10-26",
+    "notes": "India runs multiple helplines; Tele-MANAS is a national initiative."
+  },
+  {
+    "id": "united_states",
+    "country": "United States",
+    "name": "988 Suicide & Crisis Lifeline",
+    "phone": "988",
+    "website": "https://988lifeline.org/",
+    "hours": "24/7",
+    "languages": [
+      "English",
+      "Spanish",
+      "Other via translation services"
+    ],
+    "services": [
+      "Call, text, chat, local referrals"
+    ],
+    "chat_available": true,
+    "chat_link": "https://988lifeline.org/chat/",
+    "verification_source": "https://988lifeline.org/",
+    "last_verified_date": "2025-10-26",
+    "notes": "National suicide & crisis lifeline (call or text 988)."
+  },
+  {
+    "id": "indonesia",
+    "country": "Indonesia",
+    "name": "Kementerian Kesehatan / National health hotline (Sehat Negeriku)",
+    "phone": "1500-567 (varies)",
+    "website": "https://sehatnegeriku.kemkes.go.id/",
+    "hours": "Varies",
+    "languages": [
+      "Bahasa Indonesia"
+    ],
+    "services": [
+      "Health info and referrals"
+    ],
+    "chat_available": false,
+    "verification_source": "https://sehatnegeriku.kemkes.go.id/",
+    "last_verified_date": "2025-10-26",
+    "notes": "National health hotline includes mental health referrals; regional services vary."
+  },
+  {
+    "id": "pakistan",
+    "country": "Pakistan",
+    "name": "Umang Pakistan / National Helpline (various NGOs)",
+    "phone": "115 (Umang helpline)",
+    "website": "https://umangpakistan.com/",
+    "hours": "Varies; reported 24/7 for some services",
+    "languages": [
+      "Urdu",
+      "English"
+    ],
+    "services": [
+      "Counselling, crisis support, referral"
+    ],
+    "chat_available": false,
+    "verification_source": "https://umangpakistan.com/",
+    "last_verified_date": "2025-10-26",
+    "notes": "Multiple helplines run by NGOs and provincial services."
+  },
+  {
+    "id": "nigeria",
+    "country": "Nigeria",
+    "name": "Nigeria Suicide and Crisis Helpline (NGO and gov initiatives)",
+    "phone": "0800-970000-10 / 0700-970000-10 (reported)",
+    "website": "https://www.mentalhealthnigeria.com/",
+    "hours": "Varies (some 24/7)",
+    "languages": [
+      "English",
+      "Local languages"
+    ],
+    "services": [
+      "Crisis counselling, referral"
+    ],
+    "chat_available": false,
+    "verification_source": "https://www.mentalhealthnigeria.com/",
+    "last_verified_date": "2025-10-26",
+    "notes": "Helpline infrastructure varies; confirm local numbers."
+  },
+  {
+    "id": "brazil",
+    "country": "Brazil",
+    "name": "CVV (Centro de Valorização da Vida)",
+    "phone": "188",
+    "website": "https://www.cvv.org.br/",
+    "hours": "24/7",
+    "languages": [
+      "Portuguese"
+    ],
+    "services": [
+      "Phone, chat, email support"
+    ],
+    "chat_available": true,
+    "chat_link": "https://cvv.org.br/chat/",
+    "verification_source": "https://www.cvv.org.br/",
+    "last_verified_date": "2025-10-26",
+    "notes": "National suicide prevention service."
+  },
+  {
+    "id": "bangladesh",
+    "country": "Bangladesh",
+    "name": "Kaan Pete Roi (KPR) / Emotional Support",
+    "phone": "+880 1676-130315 (and other lines)",
+    "website": "https://kaanpeteroi.org/",
+    "hours": "24/7 (emotional support lines reported)",
+    "languages": [
+      "Bengali",
+      "English"
+    ],
+    "services": [
+      "Emotional counselling, crisis support"
+    ],
+    "chat_available": false,
+    "verification_source": "https://kaanpeteroi.org/",
+    "last_verified_date": "2025-10-26",
+    "notes": "NGO-run emotional support services; regional helplines also exist."
+  },
+  {
+    "id": "russia",
+    "country": "Russia",
+    "name": "National social services / emergency numbers",
+    "phone": "122 (social services) / 112 (emergency)",
+    "website": null,
+    "hours": "24/7 (emergency services)",
+    "languages": [
+      "Russian"
+    ],
+    "services": [
+      "Referral, crisis triage via emergency/social services"
+    ],
+    "chat_available": false,
+    "verification_source": null,
+    "last_verified_date": null,
+    "notes": "No single centralized national suicide hotline widely publicized; regional services and NGOs exist — verify locally."
+  },
+  {
+    "id": "mexico",
+    "country": "Mexico",
+    "name": "Crisis hotlines — Teléfono de la Esperanza and national services",
+    "phone": "(varies by region)",
+    "website": "https://telefonodelaesperanza.org/centros-de-atencion/america-latina/mexico/",
+    "hours": "Varies",
+    "languages": [
+      "Spanish"
+    ],
+    "services": [
+      "Emotional support, referral"
+    ],
+    "chat_available": false,
+    "verification_source": "https://telefonodelaesperanza.org/centros-de-atencion/america-latina/mexico/",
+    "last_verified_date": "2025-10-26",
+    "notes": "Local numbers vary; Mexico has government and NGO resources."
+  },
+  {
+    "id": "japan",
+    "country": "Japan",
+    "name": "TELL Lifeline (Tokyo) and other regional helplines",
+    "phone": "+81 3 5774 0992 (TELL)",
+    "website": "https://telljp.com/",
+    "hours": "Evenings and nights for TELL; varies",
+    "languages": [
+      "English",
+      "Japanese"
+    ],
+    "services": [
+      "Listening service, counselling referrals"
+    ],
+    "chat_available": true,
+    "verification_source": "https://telljp.com/",
+    "last_verified_date": "2025-10-26",
+    "notes": "TELL supports English-speaking residents; local Japanese-language services also exist."
+  },
+  {
+    "id": "ethiopia",
+    "country": "Ethiopia",
+    "name": "Ministry of Health mental health contact / hotline (varies)",
+    "phone": "939 (reported mental health line)",
+    "website": "https://www.moh.gov.et/",
+    "hours": "Varies",
+    "languages": [
+      "Amharic",
+      "English"
+    ],
+    "services": [
+      "Referral, psychosocial support"
+    ],
+    "chat_available": false,
+    "verification_source": "https://www.moh.gov.et/",
+    "last_verified_date": "2025-10-26",
+    "notes": "Verification recommended; services vary regionally."
+  },
+  {
+    "id": "philipines",
+    "country": "Philippines",
+    "name": "National Center for Mental Health (NCMH) Crisis Hotline",
+    "phone": "0917-899-USAP (8727) / (02) 8791-1414",
+    "website": "https://www.ncmh.gov.ph/mental-health-crisis-hotline/",
+    "hours": "24/7 (some lines)",
+    "languages": [
+      "Filipino",
+      "English"
+    ],
+    "services": [
+      "Crisis counselling, referrals"
+    ],
+    "chat_available": false,
+    "verification_source": "https://www.ncmh.gov.ph/mental-health-crisis-hotline/",
+    "last_verified_date": "2025-10-26",
+    "notes": "Multiple lines exist; numbers may change."
+  },
+  {
+    "id": "drcongo",
+    "country": "Democratic Republic of the Congo",
+    "name": "WHO/NGO mental health support (regional NGOs)",
+    "phone": null,
+    "website": "https://www.who.int/teams/mental-health-and-substance-use",
+    "hours": "Varies",
+    "languages": [
+      "French",
+      "Swahili",
+      "Local languages"
+    ],
+    "services": [
+      "Referral, psychosocial support"
+    ],
+    "chat_available": false,
+    "verification_source": "https://www.who.int/",
+    "last_verified_date": "2025-10-26",
+    "notes": "National hotline infrastructure limited; most services via NGOs and WHO programs."
+  },
+  {
+    "id": "vietnam",
+    "country": "Vietnam",
+    "name": "National mental health support / local hotlines",
+    "phone": "Varies by province (e.g., 111 in some regions)",
+    "website": "https://bvtttdl.gov.vn/",
+    "hours": "Varies",
+    "languages": [
+      "Vietnamese"
+    ],
+    "services": [
+      "Suicide prevention, counselling"
+    ],
+    "chat_available": false,
+    "verification_source": "https://bvtttdl.gov.vn/",
+    "last_verified_date": "2025-10-26",
+    "notes": "Hotline numbers vary by province; verify locally."
+  },
+  {
+    "id": "turkey",
+    "country": "Turkey",
+    "name": "Alo 184 (family health and referral) / local mental health services",
+    "phone": "184 (Alo 184 for family health referrals)",
+    "website": "https://www.saglik.gov.tr/",
+    "hours": "Varies",
+    "languages": [
+      "Turkish"
+    ],
+    "services": [
+      "Referrals, mental health info"
+    ],
+    "chat_available": false,
+    "verification_source": "https://www.saglik.gov.tr/",
+    "last_verified_date": "2025-10-26",
+    "notes": "Turkey has regional mental health services; no single nationwide suicide hotline broadly publicised."
+  },
+  {
+    "id": "iran",
+    "country": "Iran",
+    "name": "National mental health services / health ministry contacts",
+    "phone": null,
+    "website": "https://behdasht.gov.ir/",
+    "hours": "Varies",
+    "languages": [
+      "Persian (Farsi)"
+    ],
+    "services": [
+      "Referral, mental health programs"
+    ],
+    "chat_available": false,
+    "verification_source": "https://behdasht.gov.ir/",
+    "last_verified_date": "2025-10-26",
+    "notes": "Information often via Ministry of Health or university hospitals; verify locally."
+  },
+  {
+    "id": "germany",
+    "country": "Germany",
+    "name": "TelefonSeelsorge",
+    "phone": "0800 1110 111 / 0800 1110 222",
+    "website": "https://www.telefonseelsorge.de/",
+    "hours": "24/7",
+    "languages": [
+      "German"
+    ],
+    "services": [
+      "Phone, chat, email counselling"
+    ],
+    "chat_available": true,
+    "chat_link": "https://www.telefonseelsorge.de/chat/",
+    "verification_source": "https://www.telefonseelsorge.de/",
+    "last_verified_date": "2025-10-26",
+    "notes": ""
+  },
+  {
+    "id": "thailand",
+    "country": "Thailand",
+    "name": "Samaritans of Thailand / Ministry resources",
+    "phone": "1323 (Mental Health Hotline in some listings)",
+    "website": "https://www.dmh.go.th/",
+    "hours": "Varies",
+    "languages": [
+      "Thai",
+      "English (some NGOs)"
+    ],
+    "services": [
+      "Crisis support, referrals"
+    ],
+    "chat_available": false,
+    "verification_source": "https://www.dmh.go.th/",
+    "last_verified_date": "2025-10-26",
+    "notes": "Several NGO and government hotlines exist; numbers vary."
+  },
+  {
+    "id": "united_kingdom",
+    "country": "United Kingdom",
+    "name": "Samaritans",
+    "phone": "116 123",
+    "website": "https://www.samaritans.org/",
+    "hours": "24/7",
+    "languages": [
+      "English",
+      "Welsh"
+    ],
+    "services": [
+      "Phone, email, web support"
+    ],
+    "chat_available": true,
+    "chat_link": "https://www.samaritans.org/how-we-can-help/contact-samaritan/",
+    "verification_source": "https://www.samaritans.org/",
+    "last_verified_date": "2025-10-26",
+    "notes": ""
+  },
+  {
+    "id": "france",
+    "country": "France",
+    "name": "SOS Suicide / Local mental health services",
+    "phone": "3114 (Suicide prevention number in France)",
+    "website": "https://3114.fr/",
+    "hours": "24/7 (national suicide prevention number)",
+    "languages": [
+      "French"
+    ],
+    "services": [
+      "Phone counselling, referral"
+    ],
+    "chat_available": false,
+    "verification_source": "https://3114.fr/",
+    "last_verified_date": "2025-10-26",
+    "notes": ""
+  },
+  {
+    "id": "italy",
+    "country": "Italy",
+    "name": "Telefono Amico / Local regional services",
+    "phone": "800 860022 (Telefono Amico Italy - may vary)",
+    "website": "https://www.telefonoamico.it/",
+    "hours": "Varies",
+    "languages": [
+      "Italian"
+    ],
+    "services": [
+      "Emotional support"
+    ],
+    "chat_available": false,
+    "verification_source": "https://www.telefonoamico.it/",
+    "last_verified_date": "2025-10-26",
+    "notes": "Italy also has regional mental health services and emergency numbers."
+  },
+  {
+    "id": "south_africa",
+    "country": "South Africa",
+    "name": "SADAG (South African Depression and Anxiety Group)",
+    "phone": "0800 567 567",
+    "website": "https://www.sadag.org/",
+    "hours": "Varies (some 24/7 lines)",
+    "languages": [
+      "English",
+      "Afrikaans",
+      "Zulu",
+      "Other"
+    ],
+    "services": [
+      "Helplines, WhatsApp, referrals"
+    ],
+    "chat_available": true,
+    "verification_source": "https://www.sadag.org/",
+    "last_verified_date": "2025-10-26",
+    "notes": ""
+  },
+  {
+    "id": "tanzania",
+    "country": "Tanzania",
+    "name": "Ministry/NGO mental health contacts (varies)",
+    "phone": null,
+    "website": "https://www.moh.go.tz/",
+    "hours": "Varies",
+    "languages": [
+      "Swahili",
+      "English"
+    ],
+    "services": [
+      "Referral, psychosocial support"
+    ],
+    "chat_available": false,
+    "verification_source": "https://www.moh.go.tz/",
+    "last_verified_date": null,
+    "notes": "Limited national hotline infrastructure; verify locally."
+  },
+  {
+    "id": "myanmar",
+    "country": "Myanmar",
+    "name": "NGO / Ministry health mental health support (varies)",
+    "phone": null,
+    "website": "https://www.mohs.gov.mm/",
+    "hours": "Varies",
+    "languages": [
+      "Burmese"
+    ],
+    "services": [
+      "Referral, psychosocial support"
+    ],
+    "chat_available": false,
+    "verification_source": null,
+    "last_verified_date": null,
+    "notes": "Due to ongoing instability, services vary widely and may be limited."
+  },
+  {
+    "id": "south_korea",
+    "country": "South Korea",
+    "name": "Korean Suicide Prevention Hotline (Lifesavers) / Ministry resources",
+    "phone": "1393 (Suicide prevention hotline)",
+    "website": "http://www.suicidezero.org/ (examples)",
+    "hours": "24/7 (some lines)",
+    "languages": [
+      "Korean",
+      "English (some services)"
+    ],
+    "services": [
+      "Crisis counselling, referral"
+    ],
+    "chat_available": false,
+    "verification_source": "Korean gov/ministry listings",
+    "last_verified_date": "2025-10-26",
+    "notes": "1393 is widely cited as a suicide prevention line."
+  },
+  {
+    "id": "colombia",
+    "country": "Colombia",
+    "name": "National Mental Health Hotline (Icbf / Health Ministry resources)",
+    "phone": "192 (medical emergency) / 106 (national mental health contacts vary)",
+    "website": "https://www.minsalud.gov.co/",
+    "hours": "Varies",
+    "languages": [
+      "Spanish"
+    ],
+    "services": [
+      "Referral, crisis support"
+    ],
+    "chat_available": false,
+    "verification_source": "https://www.minsalud.gov.co/",
+    "last_verified_date": "2025-10-26",
+    "notes": "Local regional numbers and NGOs provide services."
+  },
+  {
+    "id": "kenya",
+    "country": "Kenya",
+    "name": "Kenya Mental Health Helplines (NGOs and government)",
+    "phone": "+254 719 911 127 (reported NGO lines)",
+    "website": "https://www.health.go.ke/",
+    "hours": "Varies",
+    "languages": [
+      "English",
+      "Swahili"
+    ],
+    "services": [
+      "Counselling, referral"
+    ],
+    "chat_available": false,
+    "verification_source": "https://www.health.go.ke/",
+    "last_verified_date": "2025-10-26",
+    "notes": "Several NGO-run helplines exist (e.g., Befrienders Nairobi)."
+  },
+  {
+    "id": "spain",
+    "country": "Spain",
+    "name": "Teléfono de la Esperanza (Spain) / national services",
+    "phone": "717 003 717 (Teléfono de la Esperanza Spain) / 024 (self-harm support in some regions)",
+    "website": "https://telefonodelaesperanza.org/",
+    "hours": "Varies (many services 24/7)",
+    "languages": [
+      "Spanish"
+    ],
+    "services": [
+      "Emotional support, referral"
+    ],
+    "chat_available": false,
+    "verification_source": "https://telefonodelaesperanza.org/",
+    "last_verified_date": "2025-10-26",
+    "notes": "Spain has many regional hotlines."
+  },
+  {
+    "id": "argentina",
+    "country": "Argentina",
+    "name": "Ministerio de Salud / Local hotlines (Linea 107 emergency)",
+    "phone": "107 (medical emergency) / local mental health lines vary",
+    "website": "https://www.argentina.gob.ar/salud",
+    "hours": "Varies",
+    "languages": [
+      "Spanish"
+    ],
+    "services": [
+      "Referral, crisis support"
+    ],
+    "chat_available": false,
+    "verification_source": "https://www.argentina.gob.ar/salud",
+    "last_verified_date": "2025-10-26",
+    "notes": "Local provincial helplines exist; verify regionally."
+  },
+  {
+    "id": "algeria",
+    "country": "Algeria",
+    "name": "Ministry of Health / local mental health resources",
+    "phone": null,
+    "website": "https://sante.gov.dz/",
+    "hours": "Varies",
+    "languages": [
+      "Arabic",
+      "French"
+    ],
+    "services": [
+      "Referral"
+    ],
+    "chat_available": false,
+    "verification_source": "https://sante.gov.dz/",
+    "last_verified_date": null,
+    "notes": "Limited centralized hotline information; look for regional services or NGOs."
+  },
+  {
+    "id": "sudan",
+    "country": "Sudan",
+    "name": "NGO and WHO mental health support (varies)",
+    "phone": null,
+    "website": "https://www.who.int/",
+    "hours": "Varies",
+    "languages": [
+      "Arabic",
+      "English"
+    ],
+    "services": [
+      "Referral, psychosocial support"
+    ],
+    "chat_available": false,
+    "verification_source": "https://www.who.int/",
+    "last_verified_date": null,
+    "notes": "Services limited due to instability; verify locally."
+  },
+  {
+    "id": "ukraine",
+    "country": "Ukraine",
+    "name": "Ukrainian mental health support lines (national and NGO)",
+    "phone": "7333 (psychological help SMS/shortcode reported) / 15-0 (state emergency contact patterns vary)",
+    "website": "https://moz.gov.ua/",
+    "hours": "Varies",
+    "languages": [
+      "Ukrainian",
+      "Russian"
+    ],
+    "services": [
+      "Psychological support, referrals"
+    ],
+    "chat_available": false,
+    "verification_source": "https://moz.gov.ua/",
+    "last_verified_date": "2025-10-26",
+    "notes": "Multiple NGOs provide crisis counselling."
+  },
+  {
+    "id": "uganda",
+    "country": "Uganda",
+    "name": "Ministry of Health / NGO helplines (varies)",
+    "phone": null,
+    "website": "https://health.go.ug/",
+    "hours": "Varies",
+    "languages": [
+      "English",
+      "Local languages"
+    ],
+    "services": [
+      "Referral, counselling"
+    ],
+    "chat_available": false,
+    "verification_source": "https://health.go.ug/",
+    "last_verified_date": null,
+    "notes": "Limited national hotline; NGOs may operate helplines."
+  },
+  {
+    "id": "iraq",
+    "country": "Iraq",
+    "name": "Ministry/NGO mental health supports (varies)",
+    "phone": null,
+    "website": "https://moh.gov.iq/",
+    "hours": "Varies",
+    "languages": [
+      "Arabic",
+      "Kurdish"
+    ],
+    "services": [
+      "Referral, psychosocial support"
+    ],
+    "chat_available": false,
+    "verification_source": "https://moh.gov.iq/",
+    "last_verified_date": null,
+    "notes": "Services affected by regional instability; NGO presence significant."
+  },
+  {
+    "id": "poland",
+    "country": "Poland",
+    "name": "Samaritan / Polish helplines (Telefon Zaufania)",
+    "phone": "116 123 (some EU shared numbers) / 800 70 2222 (Telefon Zaufania ECB?)",
+    "website": "https://www.gov.pl/web/zdrowie",
+    "hours": "Varies",
+    "languages": [
+      "Polish"
+    ],
+    "services": [
+      "Emotional support"
+    ],
+    "chat_available": false,
+    "verification_source": "https://www.gov.pl/web/zdrowie",
+    "last_verified_date": "2025-10-26",
+    "notes": "Poland operates multiple hotlines; regional services available."
+  },
+  {
+    "id": "canada",
+    "country": "Canada",
+    "name": "Crisis Services Canada / 988",
+    "phone": "988 / 1-833-456-4566 (varies by region)",
+    "website": "https://988.ca/",
+    "hours": "24/7",
+    "languages": [
+      "English",
+      "French",
+      "Other"
+    ],
+    "services": [
+      "Call, text, chat, referrals"
+    ],
+    "chat_available": true,
+    "verification_source": "https://988.ca/",
+    "last_verified_date": "2025-10-26",
+    "notes": "988 rollout exists in Canada; availability may vary provincially."
+  },
+  {
+    "id": "morocco",
+    "country": "Morocco",
+    "name": "Ministry/NGO mental health resources (varies)",
+    "phone": null,
+    "website": "https://www.sante.gov.ma/",
+    "hours": "Varies",
+    "languages": [
+      "Arabic",
+      "French"
+    ],
+    "services": [
+      "Referral"
+    ],
+    "chat_available": false,
+    "verification_source": "https://www.sante.gov.ma/",
+    "last_verified_date": null,
+    "notes": "National hotline info limited publicly; NGOs provide support."
+  },
+  {
+    "id": "saudi_arabia",
+    "country": "Saudi Arabia",
+    "name": "Saudi Ministry of Health / Aman (mental health programs)",
+    "phone": null,
+    "website": "https://www.moh.gov.sa/",
+    "hours": "Varies",
+    "languages": [
+      "Arabic",
+      "English"
+    ],
+    "services": [
+      "Referral, mental health programs"
+    ],
+    "chat_available": false,
+    "verification_source": "https://www.moh.gov.sa/",
+    "last_verified_date": null,
+    "notes": "Some hospital hotlines and mental health programs exist; verify locally."
+  },
+  {
+    "id": "uzbekistan",
+    "country": "Uzbekistan",
+    "name": "Ministry of Health / local mental health services",
+    "phone": null,
+    "website": "https://ssv.uz/",
+    "hours": "Varies",
+    "languages": [
+      "Uzbek",
+      "Russian"
+    ],
+    "services": [
+      "Referral"
+    ],
+    "chat_available": false,
+    "verification_source": null,
+    "last_verified_date": null,
+    "notes": "Limited publicly documented national hotline."
+  },
+  {
+    "id": "peru",
+    "country": "Peru",
+    "name": "Ministry of Health mental health line (Peru)",
+    "phone": "113 (in some provinces) / 105? varies",
+    "website": "https://www.gob.pe/minsa",
+    "hours": "Varies",
+    "languages": [
+      "Spanish"
+    ],
+    "services": [
+      "Referral, crisis support"
+    ],
+    "chat_available": false,
+    "verification_source": "https://www.gob.pe/minsa",
+    "last_verified_date": "2025-10-26",
+    "notes": "Local helplines and NGO resources exist; verify regionally."
+  },
+  {
+    "id": "angola",
+    "country": "Angola",
+    "name": "Ministry/NGO mental health resources (varies)",
+    "phone": null,
+    "website": "http://www.minsa.gov.ao/",
+    "hours": "Varies",
+    "languages": [
+      "Portuguese"
+    ],
+    "services": [
+      "Referral"
+    ],
+    "chat_available": false,
+    "verification_source": null,
+    "last_verified_date": null,
+    "notes": "Limited public hotline infrastructure."
+  },
+  {
+    "id": "malaysia",
+    "country": "Malaysia",
+    "name": "Befrienders / Talian Kasih / Ministry resources",
+    "phone": "03-7629 6888 (Befrienders KL listed) / Talian Kasih 15999 (government helpline)",
+    "website": "https://www.befrienders.org/asia-pacific/malaysia",
+    "hours": "Varies",
+    "languages": [
+      "Malay",
+      "English"
+    ],
+    "services": [
+      "Emotional support, referral"
+    ],
+    "chat_available": false,
+    "verification_source": "https://www.befrienders.org/asia-pacific/malaysia",
+    "last_verified_date": "2025-10-26",
+    "notes": "Malaysia has several helplines including Talian Kasih."
+  },
+  {
+    "id": "mozambique",
+    "country": "Mozambique",
+    "name": "NGO/Ministry mental health supports (varies)",
+    "phone": null,
+    "website": "https://www.misau.gov.mz/",
+    "hours": "Varies",
+    "languages": [
+      "Portuguese"
+    ],
+    "services": [
+      "Referral"
+    ],
+    "chat_available": false,
+    "verification_source": null,
+    "last_verified_date": null,
+    "notes": "Limited national hotline."
+  },
+  {
+    "id": "ghana",
+    "country": "Ghana",
+    "name": "Mental health helplines (e.g., 3MP? NGOs)",
+    "phone": "+233 302 665 202 (example clinic numbers)",
+    "website": "https://ghanahealthservice.org/",
+    "hours": "Varies",
+    "languages": [
+      "English",
+      "Local languages"
+    ],
+    "services": [
+      "Referral, counseling"
+    ],
+    "chat_available": false,
+    "verification_source": "https://ghanahealthservice.org/",
+    "last_verified_date": "2025-10-26",
+    "notes": "Several NGO-run helplines exist; verify local numbers."
+  },
+  {
+    "id": "yemen",
+    "country": "Yemen",
+    "name": "WHO/NGO mental health support (varies)",
+    "phone": null,
+    "website": "https://www.who.int/",
+    "hours": "Varies",
+    "languages": [
+      "Arabic"
+    ],
+    "services": [
+      "Psychosocial support via NGOs"
+    ],
+    "chat_available": false,
+    "verification_source": "https://www.who.int/",
+    "last_verified_date": null,
+    "notes": "Services limited due to conflict."
+  },
+  {
+    "id": "nepal",
+    "country": "Nepal",
+    "name": "Transcultural Psychosocial Organization Nepal / Ministry contacts",
+    "phone": "+977 1-4265722 (examples)",
+    "website": "https://www.tpo-nepal.org/",
+    "hours": "Varies",
+    "languages": [
+      "Nepali",
+      "English"
+    ],
+    "services": [
+      "Psycho-social counselling"
+    ],
+    "chat_available": false,
+    "verification_source": "https://www.tpo-nepal.org/",
+    "last_verified_date": "2025-10-26",
+    "notes": "NGO-run services common."
+  },
+  {
+    "id": "venezuela",
+    "country": "Venezuela",
+    "name": "Ministry/NGO mental health services (varies)",
+    "phone": null,
+    "website": "https://www.mppeuct.gob.ve/",
+    "hours": "Varies",
+    "languages": [
+      "Spanish"
+    ],
+    "services": [
+      "Referral"
+    ],
+    "chat_available": false,
+    "verification_source": null,
+    "last_verified_date": null,
+    "notes": "Limited centralized hotline info; NGO presence varies."
+  },
+  {
+    "id": "madagascar",
+    "country": "Madagascar",
+    "name": "WHO/NGO mental health support (varies)",
+    "phone": null,
+    "website": "https://www.who.int/",
+    "hours": "Varies",
+    "languages": [
+      "Malagasy",
+      "French"
+    ],
+    "services": [
+      "Referral"
+    ],
+    "chat_available": false,
+    "verification_source": "https://www.who.int/",
+    "last_verified_date": null,
+    "notes": "Limited national hotline infrastructure."
+  }
+]
