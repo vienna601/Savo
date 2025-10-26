@@ -15,7 +15,6 @@ import {
   Tooltip,
 } from "recharts";
 import { useNavigate } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 
 // ==== CONFIG ====
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
@@ -44,9 +43,9 @@ const clip = (s, n = 280) => (s.length > n ? s.slice(0, n) + "…" : s);
 // ==== MAIN COMPONENT ====
 export default function TherapistRobot() {
   // Views: "chat" (default) or "dashboard"
+  // Views: "chat" (default) or "dashboard"
   const [view, setView] = useState("chat");
-  const navigate = useNavigate();  const navigate = useNavigate();
-
+  const navigate = useNavigate();
   // Chat state
   const [messages, setMessages] = useState([
     {
