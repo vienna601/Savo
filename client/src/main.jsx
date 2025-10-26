@@ -6,6 +6,7 @@ import SigninPage from "./pages/SignIn.jsx";
 import SignupPage from "./pages/SignUp.jsx";
 import DashboardPage from "./pages/Dashboard.jsx";
 import TherapistRobot from "./pages/TherapistRobot.jsx";
+import AdminEmotions from "./pages/AdminEmotions.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -25,6 +26,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/" element={<DashboardPage />} />
           <Route path="/chat" element={<TherapistRobot />} />
+          <Route path="/admin" element={<AdminEmotions />} />
         </Routes>
       </Auth0Provider>
     </Router>

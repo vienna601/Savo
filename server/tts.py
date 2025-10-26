@@ -1,22 +1,29 @@
+# server/tts_router.py
+from fastapi import APIRouter, Form
 from transformers import VitsModel, AutoTokenizer
-import torch
 import scipy.io.wavfile
+import torch, os, uuid
+import numpy as np
+import tempfile
+
+router = APIRouter()
 
 model = VitsModel.from_pretrained("facebook/mms-tts-eng")
 tokenizer = AutoTokenizer.from_pretrained("facebook/mms-tts-eng")
+print("✅ Loaded TTS model")
+@router.post("/tts")
+async def tts(text: str = Form(...)):
+    inputs = tokenizer(text, return_tensors="pt")
+    with torch.no_grad():
+        audio = model(**inputs).waveform.squeeze().cpu().numpy()
 
-text = "some example text in the English language"
-inputs = tokenizer(text, return_tensors="pt")
+    # ✅ Convert to 16-bit PCM (browser playable)
+    audio_int16 = (audio * 32767).astype(np.int16)
 
-with torch.no_grad():
-    output = model(**inputs).waveform  # shape: [1, num_samples]
+    filename = f"{uuid.uuid4().hex}.wav"
+    filepath = os.path.join("/tmp", filename)
 
-audio = output.squeeze().cpu().numpy()  # ✅ convert to 1D array
+    scipy.io.wavfile.write(filepath, model.config.sampling_rate, audio_int16)
 
-scipy.io.wavfile.write(
-    "techno.wav",
-    rate=model.config.sampling_rate,
-    data=audio.astype("float32")        # ✅ ensure correct dtype
-)
+    return {"audio_url": f"/static/{filename}"}
 
-print("✅ Saved techno.wav")
