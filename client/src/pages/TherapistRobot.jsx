@@ -26,14 +26,14 @@ const FACE_API_URL =
   "https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js";
 
 // Expressions from face-api: neutral, happy, sad, angry, fearful, disgusted, surprised
+
 const EMOTION_PALETTE = {
-  happy: "#34d399",
-  neutral: "#94a3b8",
-  sad: "#60a5fa",
+  frustrated: "#34d399",
+  grief: "#94a3b8",
   angry: "#f87171",
-  fearful: "#a78bfa",
+  anxious: "#a78bfa",
   disgusted: "#84cc16",
-  surprised: "#fbbf24",
+  irritated: "#fbbf24",
 };
 const PIE_COLORS = Object.values(EMOTION_PALETTE);
 
