@@ -101,22 +101,22 @@ body, html {
   font-weight: 600;
 }
 
-.chat-logout-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 14px 20px;
-  color: var(--color-text-white);
-  background-color: var(--color-accent-purple);
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 1.05rem;
-  font-family: 'Quicksand', sans-serif;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  margin-top: auto;
+.logout-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    width: 100%;
+    height: 50px;
+    color: #FFF;
+    background-color: #CFB5E6;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    margin-bottom: 15px;
 }
 
 .chat-logout-btn:hover {

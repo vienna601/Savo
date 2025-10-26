@@ -56,14 +56,6 @@ const Dashboard = () => {
           </div>
 
           <div className="card">
-            <h3>Your Progress</h3>
-            <p>Track your emotional well-being</p>
-            <a href="/progress" className="card-link">
-              View Progress
-            </a>
-          </div>
-
-          <div className="card">
             <h3>Resources</h3>
             <p>Access mental health resources</p>
             <a href="/resources" className="card-link">
