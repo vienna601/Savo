@@ -1,18 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
 import "../styles/Dashboard.css";
-
-// Example emotions list
-const EMOTIONS = ["Frustrated", "Anxious", "Irritated", "Angry", "Grief"];
-const COLORS = ["#4CAF50", "#2196F3", "#FFC107", "#F44336", "#9E9E9E"];
 
 const Dashboard = () => {
   const { user, logout } = useAuth0();
@@ -20,62 +8,6 @@ const Dashboard = () => {
   const handleLogout = () => {
     logout({ returnTo: window.location.origin });
   };
-
-  // State for dynamic chart data
-  const [dailyData, setDailyData] = useState([]);
-  const [weeklyData, setWeeklyData] = useState([]);
-  const [monthlyData, setMonthlyData] = useState([]);
-
-  // Example: simulate fetching emotional averages
-  const fetchEmotionData = () => {
-    // Here, replace this with real API or localStorage data
-    const randomData = () =>
-      EMOTIONS.map((name) => ({
-        name,
-        value: Math.floor(Math.random() * 50) + 5,
-      }));
-
-    setDailyData(randomData());
-    setWeeklyData(randomData());
-    setMonthlyData(randomData());
-  };
-
-  // Update charts every 10 seconds
-  useEffect(() => {
-    fetchEmotionData(); // Initial fetch
-    const intervalId = setInterval(fetchEmotionData, 10000); // every 10s
-    return () => clearInterval(intervalId); // cleanup
-  }, []);
-
-  const renderPieChart = (title, data) => (
-    <div className="chart-card">
-      <h3>{title}</h3>
-      <ResponsiveContainer width="100%" height={240}>
-        <PieChart>
-          <Pie
-            data={data}
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            outerRadius={80}
-            fill="#8884d8"
-            dataKey="value"
-            label={({ name, percent }) =>
-              `${name} ${(percent * 100).toFixed(0)}%`
-            }
-          >
-            {data.map((entry, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={COLORS[index % COLORS.length]}
-              />
-            ))}
-          </Pie>
-          <Tooltip />
-        </PieChart>
-      </ResponsiveContainer>
-    </div>
-  );
 
   return (
     <div className="dashboard">
@@ -152,15 +84,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Pie Charts Section */}
-        <section className="charts-section">
-          <h2>Emotional Insights</h2>
-          <div className="charts-grid">
-            {renderPieChart("Daily Emotions", dailyData)}
-            {renderPieChart("Weekly Emotions", weeklyData)}
-            {renderPieChart("Monthly Emotions", monthlyData)}
-          </div>
-        </section>
+        {/* Removed Pie Charts Section */}
       </main>
     </div>
   );
