@@ -9,13 +9,13 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import '../styles/TherapistRobot.css';
+import "../styles/TherapistRobot.css";
 import { Mic, Send } from "lucide-react";
 
 // ==== CONFIG ====
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 const GEMINI_URL =
-  "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent";
+  "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent";
 
 // face-api.js (loaded dynamically)
 const FACE_API_URL =
@@ -43,7 +43,9 @@ const toPieData = (obj) =>
 
 // Helper functions
 const buildTherapistSystemPrompt = (emotion, confidence) => {
-  return `You are a warm, empathetic therapist friend. The user is currently feeling ${emotion} with ${Math.round(confidence * 100)}% confidence. Respond with compassion and understanding. Keep responses brief (1-3 sentences) and conversational.`;
+  return `You are a warm, empathetic therapist friend. The user is currently feeling ${emotion} with ${Math.round(
+    confidence * 100
+  )}% confidence. Respond with compassion and understanding. Keep responses brief (1-3 sentences) and conversational.`;
 };
 
 const deriveTextEmotion = (text) => {
@@ -135,18 +137,18 @@ export default function TherapistRobot() {
       mimeType: "audio/webm",
     });
     audioChunksRef.current = [];
-    
+
     mediaRecorderRef.current.ondataavailable = (e) => {
       audioChunksRef.current.push(e.data);
     };
-    
+
     mediaRecorderRef.current.onstop = async () => {
       const audioBlob = new Blob(audioChunksRef.current, {
         type: "audio/webm",
       });
       const formData = new FormData();
       formData.append("audio", audioBlob, "input.webm");
-      
+
       try {
         const res = await fetch("http://localhost:8000/api/transcribe", {
           method: "POST",
@@ -159,7 +161,7 @@ export default function TherapistRobot() {
         console.error("Transcription failed:", err);
       }
     };
-    
+
     mediaRecorderRef.current.start();
     setRecording(true);
   };
@@ -175,7 +177,7 @@ export default function TherapistRobot() {
   useEffect(() => {
     let stream;
     let rafId;
-    
+
     (async () => {
       if (!window.faceapi) {
         await new Promise((resolve) => {
@@ -185,10 +187,11 @@ export default function TherapistRobot() {
           document.body.appendChild(script);
         });
       }
-      
+
       const faceapi = window.faceapi;
-      const MODEL_URI = "https://justadudewhohacks.github.io/face-api.js/models";
-      
+      const MODEL_URI =
+        "https://justadudewhohacks.github.io/face-api.js/models";
+
       await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URI);
       await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URI);
       await faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URI);
@@ -207,7 +210,7 @@ export default function TherapistRobot() {
       const detectLoop = async () => {
         const video = videoRef.current;
         const canvas = canvasRef.current;
-        
+
         if (!video || !canvas) {
           rafId = requestAnimationFrame(detectLoop);
           return;
@@ -217,29 +220,36 @@ export default function TherapistRobot() {
         const H = 240;
         if (canvas.width !== W) canvas.width = W;
         if (canvas.height !== H) canvas.height = H;
-        
+
         const ctx = canvas.getContext("2d");
         ctx.drawImage(video, 0, 0, W, H);
 
         try {
           const detection = await faceapi
-            .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 224 }))
+            .detectSingleFace(
+              video,
+              new faceapi.TinyFaceDetectorOptions({ inputSize: 224 })
+            )
             .withFaceLandmarks()
             .withFaceExpressions();
-            
+
           if (detection?.expressions) {
-            const [emotion, conf] = Object.entries(detection.expressions)
-              .reduce((a, b) => (a[1] > b[1] ? a : b));
+            const [emotion, conf] = Object.entries(
+              detection.expressions
+            ).reduce((a, b) => (a[1] > b[1] ? a : b));
             setLastEmotion(emotion);
             setLastConfidence(conf);
-            
+
             if (conf >= 0.6) {
               const ts = Date.now();
-              setEmotionEvents((prev) => [...prev, { emotion, confidence: conf, ts }]);
+              setEmotionEvents((prev) => [
+                ...prev,
+                { emotion, confidence: conf, ts },
+              ]);
             }
           }
         } catch {}
-        
+
         rafId = requestAnimationFrame(detectLoop);
       };
 
@@ -265,7 +275,7 @@ export default function TherapistRobot() {
   const sendMessage = async () => {
     const text = input.trim();
     if (!text) return;
-    
+
     const userMsg = { sender: "user", text, ts: Date.now() };
     setMessages((m) => [...m, userMsg]);
     setInput("");
@@ -280,7 +290,7 @@ export default function TherapistRobot() {
     }
 
     const systemTone = buildTherapistSystemPrompt(lastEmotion, lastConfidence);
-    
+
     try {
       const res = await fetch(`${GEMINI_URL}?key=${GEMINI_API_KEY}`, {
         method: "POST",
@@ -293,13 +303,17 @@ export default function TherapistRobot() {
             },
             {
               role: "model",
-              parts: [{ text: "I understand. I'll adapt my responses accordingly." }],
+              parts: [
+                { text: "I understand. I'll adapt my responses accordingly." },
+              ],
             },
             {
               role: "user",
-              parts: [{
-                text: `${text}\n\nRespond in a warm, compact paragraph (1–3 sentences). Use everyday language. Avoid clinical jargon.`,
-              }],
+              parts: [
+                {
+                  text: `${text}\n\nRespond in a warm, compact paragraph (1–3 sentences). Use everyday language. Avoid clinical jargon.`,
+                },
+              ],
             },
           ],
           generationConfig: {
@@ -310,15 +324,19 @@ export default function TherapistRobot() {
       });
 
       const data = await res.json();
-      
+
       if (!res.ok) {
         throw new Error(`Gemini API error: ${res.status}`);
       }
 
-      const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+      const reply =
+        data?.candidates?.[0]?.content?.parts?.[0]?.text ||
         "i'm here with you. let's take one small step — can we try one deep breath together right now? 🌿";
-      
-      setMessages((m) => [...m, { sender: "bot", text: reply, ts: Date.now() }]);
+
+      setMessages((m) => [
+        ...m,
+        { sender: "bot", text: reply, ts: Date.now() },
+      ]);
     } catch (err) {
       console.error("Gemini fetch failed:", err);
       setMessages((m) => [
@@ -352,10 +370,20 @@ export default function TherapistRobot() {
           >
             <span>Home</span>
           </Link>
-          <Link to="/chat" className={`nav-item ${location.pathname === "/chat" ? "active" : ""}`}>
+          <Link
+            to="/chat"
+            className={`nav-item ${
+              location.pathname === "/chat" ? "active" : ""
+            }`}
+          >
             <span>Chat</span>
           </Link>
-          <Link to="/resources" className={`nav-item ${location.pathname === "/resources" ? "active" : ""}`}>
+          <Link
+            to="/resources"
+            className={`nav-item ${
+              location.pathname === "/resources" ? "active" : ""
+            }`}
+          >
             <span>Resources</span>
           </Link>
         </nav>

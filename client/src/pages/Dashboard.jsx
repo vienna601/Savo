@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import "../styles/Dashboard.css";
 import { Link, useLocation } from "react-router-dom";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
+
+// Example emotions list
+const EMOTIONS = ["Frustrated", "Anxious", "Irritated", "Angry", "Grief"];
+const COLORS = ["#4CAF50", "#2196F3", "#FFC107", "#F44336", "#9E9E9E"];
 
 const Dashboard = () => {
   const { user, logout } = useAuth0();
@@ -10,6 +22,62 @@ const Dashboard = () => {
   const handleLogout = () => {
     logout({ returnTo: window.location.origin });
   };
+
+  // State for dynamic chart data
+  const [dailyData, setDailyData] = useState([]);
+  const [weeklyData, setWeeklyData] = useState([]);
+  const [monthlyData, setMonthlyData] = useState([]);
+
+  // Example: simulate fetching emotional averages
+  const fetchEmotionData = () => {
+    // Here, replace this with real API or localStorage data
+    const randomData = () =>
+      EMOTIONS.map((name) => ({
+        name,
+        value: Math.floor(Math.random() * 50) + 5,
+      }));
+
+    setDailyData(randomData());
+    setWeeklyData(randomData());
+    setMonthlyData(randomData());
+  };
+
+  // Update charts every 10 seconds
+  useEffect(() => {
+    fetchEmotionData(); // Initial fetch
+    const intervalId = setInterval(fetchEmotionData, 10000); // every 10s
+    return () => clearInterval(intervalId); // cleanup
+  }, []);
+
+  const renderPieChart = (title, data) => (
+    <div className="chart-card">
+      <h3>{title}</h3>
+      <ResponsiveContainer width="100%" height={240}>
+        <PieChart>
+          <Pie
+            data={data}
+            cx="50%"
+            cy="50%"
+            labelLine={false}
+            outerRadius={80}
+            fill="#8884d8"
+            dataKey="value"
+            label={({ name, percent }) =>
+              `${name} ${(percent * 100).toFixed(0)}%`
+            }
+          >
+            {data.map((entry, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={COLORS[index % COLORS.length]}
+              />
+            ))}
+          </Pie>
+          <Tooltip />
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
+  );
 
   return (
     <div className="dashboard">
@@ -20,13 +88,30 @@ const Dashboard = () => {
         </div>
 
         <nav className="nav-menu">
-          <Link to="/dashboard" className={`nav-item ${location.pathname === "/" || location.pathname === "/dashboard" ? "active" : ""}`}>
+          <Link
+            to="/dashboard"
+            className={`nav-item ${
+              location.pathname === "/" || location.pathname === "/dashboard"
+                ? "active"
+                : ""
+            }`}
+          >
             <span>Home</span>
           </Link>
-          <Link to="/chat" className={`nav-item ${location.pathname === "/chat" ? "active" : ""}`}>
+          <Link
+            to="/chat"
+            className={`nav-item ${
+              location.pathname === "/chat" ? "active" : ""
+            }`}
+          >
             <span>Chat</span>
           </Link>
-          <Link to="/resources" className={`nav-item ${location.pathname === "/resources" ? "active" : ""}`}>
+          <Link
+            to="/resources"
+            className={`nav-item ${
+              location.pathname === "/resources" ? "active" : ""
+            }`}
+          >
             <span>Resources</span>
           </Link>
         </nav>
@@ -67,7 +152,15 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Removed Pie Charts Section */}
+        {/* Pie Charts Section */}
+        <section className="charts-section">
+          <h2>Emotional Insights</h2>
+          <div className="charts-grid">
+            {renderPieChart("Daily Emotions", dailyData)}
+            {renderPieChart("Weekly Emotions", weeklyData)}
+            {renderPieChart("Monthly Emotions", monthlyData)}
+          </div>
+        </section>
       </main>
     </div>
   );
