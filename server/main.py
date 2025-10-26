@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from server import users
+from server import emotions
+from server import users, emotions
 
 app = FastAPI()
 
@@ -13,3 +14,4 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(users.router, prefix="/api", tags=["Users"])
+app.include_router(emotions.router, prefix="/api", tags=["Emotions"])

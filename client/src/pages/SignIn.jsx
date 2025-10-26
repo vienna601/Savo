@@ -50,7 +50,11 @@ const LoginPage = () => {
   const handleSignIn = async () => {
     try {
       await loginWithRedirect({
-        prompt: "login",
+        appState: { returnTo: "/dashboard" },
+        authorizationParams: {
+          redirect_uri: `${window.location.origin}/dashboard`,
+          scope: "openid profile email",
+        },
       });
     } catch (err) {
       console.error("Auth0 login failed:", err);

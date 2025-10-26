@@ -5,6 +5,7 @@ import { Auth0Provider } from "@auth0/auth0-react";
 import SigninPage from "./pages/SignIn.jsx";
 import SignupPage from "./pages/SignUp.jsx";
 import DashboardPage from "./pages/Dashboard.jsx";
+import TherapistRobot from "./pages/TherapistRobot.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -13,14 +14,15 @@ createRoot(document.getElementById("root")).render(
         domain={import.meta.env.VITE_AUTH0_DOMAIN}
         clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
         authorizationParams={{
-          redirect_uri: window.location.origin + "/",
+          redirect_uri: window.location.origin + "/dashboard",
           audience: import.meta.env.VITE_AUTH0_AUDIENCE,
         }}
       >
         <Routes>
-          <Route path="/" element={<SigninPage />} />
+          <Route path="/signin" element={<SigninPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/" element={<TherapistRobot />} />
         </Routes>
       </Auth0Provider>
     </Router>
