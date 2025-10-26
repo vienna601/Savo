@@ -174,7 +174,7 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   text-align: center;
   transition: transform 0.2s;
-  height: 300px; /* add a fixed height */
+  height: 400px; /* add a fixed height */
 }
 
 .chart-card:hover {
