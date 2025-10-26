@@ -212,8 +212,6 @@ export default function TherapistRobot() {
       ]);
     }
 
-    const systemTone = buildTherapistSystemPrompt(lastEmotion, lastConfidence);
-
     try {
       if (!GEMINI_API_KEY) {
         throw new Error("Missing API key");
