@@ -15,6 +15,7 @@ import {
   Tooltip,
 } from "recharts";
 import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // ==== CONFIG ====
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
@@ -44,7 +45,7 @@ const clip = (s, n = 280) => (s.length > n ? s.slice(0, n) + "…" : s);
 export default function TherapistRobot() {
   // Views: "chat" (default) or "dashboard"
   const [view, setView] = useState("chat");
-  const navigate = useNavigate();
+  const navigate = useNavigate();  const navigate = useNavigate();
 
   // Chat state
   const [messages, setMessages] = useState([
@@ -77,6 +78,50 @@ export default function TherapistRobot() {
     localStorage.setItem("emotion-events", JSON.stringify(emotionEvents));
   }, [emotionEvents]);
 
+  const [recording, setRecording] = useState(false);
+  let mediaRecorderRef = useRef(null);
+  let audioChunksRef = useRef([]);
+
+  //recording functions
+  const startRecording = async () => {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorderRef.current = new MediaRecorder(stream, {
+      mimeType: "audio/webm",
+    });
+
+    audioChunksRef.current = [];
+
+    mediaRecorderRef.current.ondataavailable = (e) => {
+      audioChunksRef.current.push(e.data);
+    };
+
+    mediaRecorderRef.current.onstop = async () => {
+      const audioBlob = new Blob(audioChunksRef.current, {
+        type: "audio/webm",
+      });
+
+      const formData = new FormData();
+      formData.append("audio", audioBlob, "input.webm");
+
+      const res = await fetch("http://localhost:8080/transcribe", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      console.log("👉 Transcribed:", data.text);
+      setInput(data.text);
+    };
+
+    mediaRecorderRef.current.start();
+    setRecording(true);
+  };
+
+  const stopRecording = () => {
+    mediaRecorderRef.current.stop();
+    setRecording(false);
+  };
+
   // Keyboard shortcuts
   useEffect(() => {
     const onKey = (e) => {
@@ -85,7 +130,7 @@ export default function TherapistRobot() {
 
       if (ctrl && e.shiftKey && e.key.toLowerCase() === "d") {
         e.preventDefault();
-        setView("dashboard");
+        navigate("/dashboard");
       } else if (e.key === "Escape") {
         setView("chat");
       }
@@ -389,6 +434,19 @@ export default function TherapistRobot() {
 
         {/* Input */}
         <div className="mt-4 flex items-center gap-2">
+          {/* 🎤 Mic Button */}
+          <button
+            onClick={recording ? stopRecording : startRecording}
+            className={`p-3 rounded-full border border-white/20 transition ${
+              recording
+                ? "bg-red-500 hover:bg-red-600"
+                : "bg-white/10 hover:bg-white/20"
+            }`}
+            title={recording ? "Stop Recording" : "Start Recording"}
+          >
+            {recording ? "⏹" : "🎤"}
+          </button>
+
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -396,6 +454,7 @@ export default function TherapistRobot() {
             placeholder="share your thoughts…"
             className="flex-1 px-4 py-2 rounded-full bg-white/15 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400"
           />
+
           <button
             onClick={sendMessage}
             className="p-3 rounded-full bg-gradient-to-r from-sky-400 to-blue-500 hover:scale-105 transition"

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from server import emotions
-from server import users, emotions
+from server import users, emotions, transcribe
 
 app = FastAPI()
 
