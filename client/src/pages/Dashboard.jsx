@@ -1,9 +1,11 @@
 import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import "../styles/Dashboard.css";
+import { Link, useLocation } from "react-router-dom";
 
 const Dashboard = () => {
   const { user, logout } = useAuth0();
+  const location = useLocation();
 
   const handleLogout = () => {
     logout({ returnTo: window.location.origin });
@@ -18,18 +20,12 @@ const Dashboard = () => {
         </div>
 
         <nav className="nav-menu">
-          <a href="/dashboard" className="nav-item active">
+          <Link to="/dashboard" className={`nav-item ${location.pathname === "/" || location.pathname === "/dashboard" ? "active" : ""}`}>
             <span>Home</span>
-          </a>
-          <a href="/chat" className="nav-item">
+          </Link>
+          <Link to="/chat" className={`nav-item ${location.pathname === "/chat" ? "active" : ""}`}>
             <span>Chat</span>
-          </a>
-          <a href="/profile" className="nav-item">
-            <span>Profile</span>
-          </a>
-          <a href="/settings" className="nav-item">
-            <span>Settings</span>
-          </a>
+          </Link>
         </nav>
 
         <button onClick={handleLogout} className="logout-btn">
@@ -72,14 +68,6 @@ const Dashboard = () => {
             <p>Access mental health resources</p>
             <a href="/resources" className="card-link">
               Browse Resources
-            </a>
-          </div>
-
-          <div className="card">
-            <h3>Community</h3>
-            <p>Connect with others</p>
-            <a href="/community" className="card-link">
-              Join Community
             </a>
           </div>
         </div>

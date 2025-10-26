@@ -1,4 +1,3 @@
-// TherapistRobot.jsx
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -9,7 +8,9 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { MessageCircleHeart, Mic, Send, BarChart3, ArrowLeft } from "lucide-react";
+import '../styles/TherapistRobot.css';
+import { useNavigate, Link, useLocation } from "react-router-dom";
+import { Mic, Send } from "lucide-react";
 
 // ==== CONFIG ====
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
@@ -22,6 +23,7 @@ const FACE_API_URL =
 
 // Expressions from face-api: neutral, happy, sad, angry, fearful, disgusted, surprised
 
+// Example emotions list
 const EMOTION_PALETTE = {
   frustrated: "#34d399",
   grief: "#94a3b8",
@@ -123,6 +125,13 @@ const PieCard = ({ title, data }) => (
 export default function TherapistRobot() {
   const [view, setView] = useState("chat");
   const navigate = useNavigate();
+  const location = useLocation();
+  const audioRef = useRef(new Audio());
+
+  const handleLogout = () => {
+    logout({ returnTo: window.location.origin });
+  };
+
   // Chat state
   const [messages, setMessages] = useState([
     {
@@ -197,25 +206,6 @@ export default function TherapistRobot() {
     mediaRecorderRef.current.stop();
     setRecording(false);
   };
-
-  // Keyboard shortcuts
-  useEffect(() => {
-    const shortcutHandler = (e) => {
-      const isMac = navigator.platform.toUpperCase().includes("MAC");
-      const ctrl = isMac ? e.metaKey : e.ctrlKey;
-
-      if (ctrl && e.shiftKey && e.key.toLowerCase() === "e") {
-        navigate("/admin");
-      }
-
-      if (e.key === "Escape" && view === "dashboard") {
-        setView("chat");
-      }
-    };
-
-    window.addEventListener("keydown", shortcutHandler);
-    return () => window.removeEventListener("keydown", shortcutHandler);
-  }, [navigate, view]);
 
   // Load face-api.js and run hidden detection loop
   useEffect(() => {
@@ -365,15 +355,15 @@ export default function TherapistRobot() {
     const data = await res.json();
     console.log("Gemini raw:", data);
 
-    if (!res.ok) {
-      throw new Error(
-        `Gemini API error: ${res.status} - ${JSON.stringify(data)}`
-      );
-    }
-
-    const reply =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-      "i'm here with you. let’s take one small step — can we try one deep breath together right now? 🌿";
+      if (!res.ok) {
+        throw new Error(
+          `Gemini API error: ${res.status} - ${JSON.stringify(data)}`
+        );
+      }
+      
+      const reply =
+        data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+        "i'm here with you. let’s take one small step — can we try one deep breath together right now? 🌿";
 
     setMessages((m) => [...m, { sender: "bot", text: reply, ts: Date.now() }]);
   } catch (err) {
@@ -403,129 +393,63 @@ export default function TherapistRobot() {
     aggregateEmotions(emotionEvents.filter((e) => e.ts >= monthStart))
   );
 
-  // ==== UI ====
-  if (view === "dashboard") {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-800 text-white p-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <div className="p-3 rounded-2xl bg-cyan-600/20 border border-cyan-400/40">
-                <BarChart3 className="text-cyan-300" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-cyan-300">
-                  Emotion Analytics
-                </h1>
-                <p className="text-sm text-gray-400">
-                  Daily, Weekly, Monthly averages (from background signals)
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={() => setView("chat")}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15"
-              title="Esc"
-            >
-              <ArrowLeft size={16} />
-              Back to Chat
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <PieCard title="Today" data={withFallback(dailyData)} />
-            <PieCard title="This Week" data={withFallback(weeklyData)} />
-            <PieCard title="This Month" data={withFallback(monthlyData)} />
-          </div>
-
-          <p className="mt-6 text-xs text-gray-500">
-            Tip: Press{" "}
-            <kbd className="px-1.5 py-0.5 bg-white/10 rounded">Esc</kbd> to
-            return to the chat.
-          </p>
-        </div>
+return (
+  <div className="chat">
+    {/* Sidebar */}
+    <aside className="sidebar">
+      <div className="logo">
+        <span>Savo</span>
       </div>
-    );
-  }
-
-  // Chat view
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-sky-950 to-cyan-900 flex items-center justify-center p-6 text-white">
-      {/* Hidden video/canvas for background emotion detection */}
-      <video ref={videoRef} autoPlay muted style={{ display: "none" }} />
-      <canvas ref={canvasRef} style={{ display: "none" }} />
-
-      <div className="w-full max-w-lg h-[740px] bg-white/10 backdrop-blur-xl border border-white/15 rounded-3xl shadow-2xl p-5 flex flex-col">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <div className="p-3 rounded-full bg-gradient-to-r from-sky-400 to-cyan-500 shadow-lg">
-              <MessageCircleHeart size={22} />
-            </div>
-            <div>
-              <h2 className="text-lg font-bold">Therapy Friend</h2>
-              <p className="text-xs text-gray-300">
-                tuned to your vibe — currently sensing:{" "}
-                <span
-                  className="font-semibold"
-                  style={{ color: EMOTION_PALETTE[lastEmotion] || "#e5e7eb" }}
-                >
-                  {pretty(lastEmotion)}{" "}
-                  {lastConfidence
-                    ? `(${Math.round(lastConfidence * 100)}%)`
-                    : ""}
-                </span>
-              </p>
-            </div>
-          </div>
-
-          <button
-            onClick={() => setView("dashboard")}
-            className="p-2 rounded-lg bg-white/10 hover:bg-white/15 border border-white/15"
-            title="View Analytics (Ctrl+Shift+E)"
-          >
-            <BarChart3 size={20} />
-          </button>
+      <nav className="nav-menu">
+        <Link to="/dashboard" className={`nav-item ${location.pathname === "/" || location.pathname === "/dashboard" ? "active" : ""}`}>
+          <span>Home</span>
+        </Link>
+        <Link
+          to="/chat"
+          className={`nav-item ${location.pathname === "/chat" ? "active" : ""}`}
+        >
+          <span>Chat</span>
+        </Link>
+      </nav>
+      <button onClick={handleLogout} className="chat-logout-btn">
+        <span>Logout</span>
+      </button>
+    </aside>
+    
+    <div className="main-content">
+      <div className="chat-container">
+        {/* Robot Avatar */}
+        <div className="robot-avatar">
+          <img 
+            src="/src/assets/robot-smiling.png" 
+            alt="Therapist Robot" 
+          />
         </div>
-
+        
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto mb-4 space-y-3">
-          {messages.map((msg, i) => (
+        <div className="chat-messages">
+          {messages.map((m, i) => (
             <div
               key={i}
-              className={`flex ${
-                msg.sender === "user" ? "justify-end" : "justify-start"
+              className={`message ${
+                m.sender === "user" ? "message-user" : "message-bot"
               }`}
             >
-              <div
-                className={`max-w-[75%] px-4 py-2 rounded-2xl ${
-                  msg.sender === "user"
-                    ? "bg-gradient-to-r from-sky-500 to-cyan-500 text-white"
-                    : "bg-white/10 text-gray-100"
-                }`}
-              >
-                {msg.text}
-              </div>
+              {m.text}
             </div>
           ))}
           {typing && (
-            <div className="flex justify-start">
-              <div className="bg-white/10 text-gray-100 px-4 py-2 rounded-2xl">
-                typing...
-              </div>
-            </div>
+            <div className="message message-bot">typing…</div>
           )}
         </div>
-
+        
         {/* Input */}
-        <div className="flex gap-2">
+        <div className="input-container">
+          {/* 🎤 Mic Button */}
           <button
             onClick={recording ? stopRecording : startRecording}
-            className={`p-3 rounded-xl ${
-              recording
-                ? "bg-red-500 hover:bg-red-600"
-                : "bg-white/10 hover:bg-white/15"
-            } border border-white/15`}
+            className={`mic-button ${recording ? "recording" : ""}`}
+            title={recording ? "Stop Recording" : "Start Recording"}
           >
             <Mic size={20} />
           </button>
@@ -534,21 +458,82 @@ export default function TherapistRobot() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-            placeholder="share what's on your mind..."
-            className="flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400"
+            placeholder="share your thoughts…"
+            className="chat-input"
           />
           <button
             onClick={sendMessage}
-            className="p-3 rounded-xl bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600"
+            className="send-button"
+            title="Send"
           >
             <Send size={20} />
           </button>
         </div>
-
-        <p className="mt-3 text-xs text-center text-gray-400">
-          Press <kbd className="px-1.5 py-0.5 bg-white/10 rounded">Ctrl+Shift+E</kbd> to view emotion analytics
-        </p>
       </div>
+    </div>
+    
+    {/* Hidden video & canvas for background detection (not shown to users) */}
+    <video
+      ref={videoRef}
+      autoPlay
+      muted
+      playsInline
+      style={{ width: 0, height: 0, opacity: 0, position: "absolute" }}
+    />
+    <canvas
+      ref={canvasRef}
+      style={{ width: 0, height: 0, opacity: 0, position: "absolute" }}
+    />
+  </div>
+);
+}
+
+// ===== UI Fragments =====
+function PieCard({ title, data }) {
+  return (
+    <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-cyan-400/30">
+      <h3 className="text-center font-semibold mb-3">{title}</h3>
+      <div className="h-[240px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            <Tooltip
+              contentStyle={{
+                backgroundColor: "rgba(17,24,39,0.9)",
+                border: "none",
+                borderRadius: "10px",
+                color: "#fff",
+              }}
+            />
+            <Pie
+              data={data}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              outerRadius={80}
+              label={({ name, percent }) =>
+                `${name} ${(percent * 100).toFixed(0)}%`
+              }
+            >
+              {data.map((entry, idx) => (
+                <Cell
+                  key={`cell-${idx}`}
+                  fill={
+                    EMOTION_PALETTE[entry.name.toLowerCase()] ||
+                    PIE_COLORS[idx % PIE_COLORS.length]
+                  }
+                />
+              ))}
+            </Pie>
+            <Legend />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+      {sumValues(data) === 0 && (
+        <p className="text-center text-xs text-gray-400 mt-2">
+          no signals yet — try chatting or enable camera permissions
+        </p>
+      )}
     </div>
   );
 }
