@@ -1,28 +1,35 @@
-.emotion-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* center everything nicely */
-  gap: 16px; /* space between elements */
-  padding-top: 20px;
-}
-
 .camera-wrapper {
-  position: relative; /* video + canvas stack together */
-  width: 640px;
-  height: 480px;
+  position: relative;
+  width: 1000px;
+  height: 500px;
+  margin-bottom: 24px; /* space before graph */
 }
 
+/* Stack video and canvas directly */
 .camera-wrapper video,
 .camera-wrapper canvas {
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%; /* make both match */
+  height: 100%; /* make both match */
+  object-fit: cover;
+  border-radius: 12px;
+  transform: scaleX(-1); /* mirror webcam for natural look */
 }
 
-.camera-wrapper video {
-  z-index: 1;
-}
-
+/* Ensure canvas is drawn on top */
 .camera-wrapper canvas {
-  z-index: 2; /* overlays bounding box drawings */
+  z-index: 10;
+}
+#expressionLabel {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-shadow: 0 0 15px rgba(0, 0, 0, 0.6); /* readable over video */
+  color: white;
+}
+.graph-container {
+  width: 1000px;
+  height: 300px;
 }

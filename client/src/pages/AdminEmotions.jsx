@@ -100,8 +100,10 @@ const FaceEmotionDetector = () => {
         Loading models...
       </div>
 
-      <video ref={videoRef} width="640" height="480" autoPlay muted></video>
-      <canvas ref={canvasRef} width="640" height="480"></canvas>
+      <div className="camera-wrapper">
+        <video ref={videoRef} autoPlay muted />
+        <canvas ref={canvasRef} />
+      </div>
       <div>
         <EmotionGraph data={confidenceHistory} />
       </div>
