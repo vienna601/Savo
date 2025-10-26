@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import {
-  Layout,
-  Home,
-  MessageCircle,
-  User,
-  Settings,
-  LogOut,
-} from "lucide-react";
-import {
   PieChart,
   Pie,
   Cell,
@@ -19,7 +11,7 @@ import {
 import "../styles/Dashboard.css";
 
 // Example emotions list
-const EMOTIONS = ["Happy", "Sad", "Angry", "Fearful", "Neutral"];
+const EMOTIONS = ["Frustrated", "Anxious", "Irritated", "Angry", "Grief"];
 const COLORS = ["#4CAF50", "#2196F3", "#FFC107", "#F44336", "#9E9E9E"];
 
 const Dashboard = () => {
@@ -80,7 +72,6 @@ const Dashboard = () => {
             ))}
           </Pie>
           <Tooltip />
-          <Legend />
         </PieChart>
       </ResponsiveContainer>
     </div>
@@ -91,31 +82,25 @@ const Dashboard = () => {
       {/* Sidebar */}
       <aside className="sidebar">
         <div className="logo">
-          <Layout size={24} />
           <span>Savo</span>
         </div>
 
         <nav className="nav-menu">
           <a href="/dashboard" className="nav-item active">
-            <Home size={20} />
             <span>Home</span>
           </a>
           <a href="/chat" className="nav-item">
-            <MessageCircle size={20} />
             <span>Chat</span>
           </a>
           <a href="/profile" className="nav-item">
-            <User size={20} />
             <span>Profile</span>
           </a>
           <a href="/settings" className="nav-item">
-            <Settings size={20} />
             <span>Settings</span>
           </a>
         </nav>
 
         <button onClick={handleLogout} className="logout-btn">
-          <LogOut size={20} />
           <span>Logout</span>
         </button>
       </aside>
