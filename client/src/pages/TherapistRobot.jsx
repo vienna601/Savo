@@ -1,5 +1,5 @@
-// AdminEmotions.jsx
-import React, { useEffect, useState } from "react";
+// TherapistRobot.jsx
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   PieChart,
@@ -8,13 +8,8 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
 } from "recharts";
-import { useNavigate } from "react-router-dom";
+import { MessageCircleHeart, Mic, Send, BarChart3, ArrowLeft } from "lucide-react";
 
 // ==== CONFIG ====
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
@@ -41,8 +36,92 @@ const PIE_COLORS = Object.values(EMOTION_PALETTE);
 const toPieData = (obj) =>
   Object.entries(obj).map(([name, value]) => ({ name, value }));
 
-export default function AdminEmotions() {
-  const [visible, setVisible] = useState(false);
+// Helper functions
+const buildTherapistSystemPrompt = (emotion, confidence) => {
+  return `You are a warm, empathetic therapist friend. The user is currently feeling ${emotion} with ${Math.round(confidence * 100)}% confidence. Respond with compassion and understanding. Keep responses brief (1-3 sentences) and conversational.`;
+};
+
+const deriveTextEmotion = (text) => {
+  const lower = text.toLowerCase();
+  if (lower.includes("sad") || lower.includes("depressed")) return "sad";
+  if (lower.includes("angry") || lower.includes("mad")) return "angry";
+  if (lower.includes("anxious") || lower.includes("worried")) return "anxious";
+  if (lower.includes("happy") || lower.includes("great")) return "happy";
+  return null;
+};
+
+const startOfDay = (ts) => {
+  const d = new Date(ts);
+  d.setHours(0, 0, 0, 0);
+  return d.getTime();
+};
+
+const startOfWeek = (ts) => {
+  const d = new Date(ts);
+  const day = d.getDay();
+  const diff = d.getDate() - day;
+  d.setDate(diff);
+  d.setHours(0, 0, 0, 0);
+  return d.getTime();
+};
+
+const startOfMonth = (ts) => {
+  const d = new Date(ts);
+  d.setDate(1);
+  d.setHours(0, 0, 0, 0);
+  return d.getTime();
+};
+
+const pretty = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+
+const withFallback = (data) => {
+  if (!data || data.length === 0) {
+    return [{ name: "No data", value: 1 }];
+  }
+  return data;
+};
+
+const aggregateEmotions = (events) => {
+  const counts = {};
+  events.forEach((e) => {
+    counts[e.emotion] = (counts[e.emotion] || 0) + 1;
+  });
+  return counts;
+};
+
+// PieCard component
+const PieCard = ({ title, data }) => (
+  <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
+    <h3 className="text-lg font-semibold mb-4 text-center">{title}</h3>
+    <ResponsiveContainer width="100%" height={200}>
+      <PieChart>
+        <Pie
+          data={data}
+          dataKey="value"
+          nameKey="name"
+          cx="50%"
+          cy="50%"
+          outerRadius={70}
+          label={({ name, percent }) =>
+            percent > 0 ? `${name} ${(percent * 100).toFixed(0)}%` : ""
+          }
+        >
+          {data.map((entry, index) => (
+            <Cell
+              key={`cell-${index}`}
+              fill={PIE_COLORS[index % PIE_COLORS.length]}
+            />
+          ))}
+        </Pie>
+        <Tooltip />
+        <Legend />
+      </PieChart>
+    </ResponsiveContainer>
+  </div>
+);
+
+export default function TherapistRobot() {
+  const [view, setView] = useState("chat");
   const navigate = useNavigate();
   // Chat state
   const [messages, setMessages] = useState([
@@ -121,18 +200,22 @@ export default function AdminEmotions() {
 
   // Keyboard shortcuts
   useEffect(() => {
-    const onKey = (e) => {
+    const shortcutHandler = (e) => {
       const isMac = navigator.platform.toUpperCase().includes("MAC");
       const ctrl = isMac ? e.metaKey : e.ctrlKey;
 
       if (ctrl && e.shiftKey && e.key.toLowerCase() === "e") {
         navigate("/admin");
       }
+
+      if (e.key === "Escape" && view === "dashboard") {
+        setView("chat");
+      }
     };
 
     window.addEventListener("keydown", shortcutHandler);
     return () => window.removeEventListener("keydown", shortcutHandler);
-  }, []);
+  }, [navigate, view]);
 
   // Load face-api.js and run hidden detection loop
   useEffect(() => {
@@ -314,10 +397,10 @@ export default function AdminEmotions() {
   const weekStart = startOfWeek(now);
   const monthStart = startOfMonth(now);
 
-  const dailyData = toPieData(emotionEvents.filter((e) => e.ts >= dayStart));
-  const weeklyData = toPieData(emotionEvents.filter((e) => e.ts >= weekStart));
+  const dailyData = toPieData(aggregateEmotions(emotionEvents.filter((e) => e.ts >= dayStart)));
+  const weeklyData = toPieData(aggregateEmotions(emotionEvents.filter((e) => e.ts >= weekStart)));
   const monthlyData = toPieData(
-    emotionEvents.filter((e) => e.ts >= monthStart)
+    aggregateEmotions(emotionEvents.filter((e) => e.ts >= monthStart))
   );
 
   // ==== UI ====
@@ -368,6 +451,10 @@ export default function AdminEmotions() {
   // Chat view
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-sky-950 to-cyan-900 flex items-center justify-center p-6 text-white">
+      {/* Hidden video/canvas for background emotion detection */}
+      <video ref={videoRef} autoPlay muted style={{ display: "none" }} />
+      <canvas ref={canvasRef} style={{ display: "none" }} />
+
       <div className="w-full max-w-lg h-[740px] bg-white/10 backdrop-blur-xl border border-white/15 rounded-3xl shadow-2xl p-5 flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
@@ -392,61 +479,76 @@ export default function AdminEmotions() {
             </div>
           </div>
 
-          {/* After Pie */}
-          <div style={{ width: 300, height: 300, background: "#222", padding: 10, borderRadius: 10 }}>
-            <h3 style={{ textAlign: "center" }}>After: {user.name}</h3>
-            <ResponsiveContainer width="100%" height="90%">
-              <PieChart>
-                <Pie
-                  data={toPieData(user.after)}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-                  label={({ name, percent }) =>
-                    `${name} ${(percent * 100).toFixed(0)}%`
-                  }
-                >
-                  {Object.keys(user.after).map((key, i) => (
-                    <Cell
-                      key={i}
-                      fill={EMOTION_COLORS[key.toLowerCase()] || "#888"}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
+          <button
+            onClick={() => setView("dashboard")}
+            className="p-2 rounded-lg bg-white/10 hover:bg-white/15 border border-white/15"
+            title="View Analytics (Ctrl+Shift+E)"
+          >
+            <BarChart3 size={20} />
+          </button>
         </div>
-      ))}
 
-      <div style={{ width: "100%", maxWidth: 800, margin: "0 auto" }}>
-        <h2 style={{ textAlign: "center", marginBottom: "1rem" }}>
-          Improvement Line Chart
-        </h2>
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={lineData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#555" />
-            <XAxis dataKey="name" stroke="#fff" />
-            <YAxis stroke="#fff" />
-            <Tooltip />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey="improvement"
-              stroke="#4CAF50"
-              strokeWidth={3}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+        {/* Messages */}
+        <div className="flex-1 overflow-y-auto mb-4 space-y-3">
+          {messages.map((msg, i) => (
+            <div
+              key={i}
+              className={`flex ${
+                msg.sender === "user" ? "justify-end" : "justify-start"
+              }`}
+            >
+              <div
+                className={`max-w-[75%] px-4 py-2 rounded-2xl ${
+                  msg.sender === "user"
+                    ? "bg-gradient-to-r from-sky-500 to-cyan-500 text-white"
+                    : "bg-white/10 text-gray-100"
+                }`}
+              >
+                {msg.text}
+              </div>
+            </div>
+          ))}
+          {typing && (
+            <div className="flex justify-start">
+              <div className="bg-white/10 text-gray-100 px-4 py-2 rounded-2xl">
+                typing...
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Input */}
+        <div className="flex gap-2">
+          <button
+            onClick={recording ? stopRecording : startRecording}
+            className={`p-3 rounded-xl ${
+              recording
+                ? "bg-red-500 hover:bg-red-600"
+                : "bg-white/10 hover:bg-white/15"
+            } border border-white/15`}
+          >
+            <Mic size={20} />
+          </button>
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+            placeholder="share what's on your mind..."
+            className="flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400"
+          />
+          <button
+            onClick={sendMessage}
+            className="p-3 rounded-xl bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600"
+          >
+            <Send size={20} />
+          </button>
+        </div>
+
+        <p className="mt-3 text-xs text-center text-gray-400">
+          Press <kbd className="px-1.5 py-0.5 bg-white/10 rounded">Ctrl+Shift+E</kbd> to view emotion analytics
+        </p>
       </div>
-
-      <p style={{ textAlign: "center", marginTop: "2rem", color: "#ccc" }}>
-        Press Ctrl+Shift+E again to hide
-      </p>
     </div>
   );
 }
