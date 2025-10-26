@@ -15,7 +15,6 @@ import {
   Tooltip,
 } from "recharts";
 import { useNavigate } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 
 // ==== CONFIG ====
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
@@ -44,9 +43,9 @@ const clip = (s, n = 280) => (s.length > n ? s.slice(0, n) + "…" : s);
 // ==== MAIN COMPONENT ====
 export default function TherapistRobot() {
   // Views: "chat" (default) or "dashboard"
+  // Views: "chat" (default) or "dashboard"
   const [view, setView] = useState("chat");
-  const navigate = useNavigate();  const navigate = useNavigate();
-
+  const navigate = useNavigate();
   // Chat state
   const [messages, setMessages] = useState([
     {
@@ -141,102 +140,95 @@ export default function TherapistRobot() {
 
   // Load face-api.js and run hidden detection loop
   useEffect(() => {
-    let stream;
-    let rafId;
+  let stream;
+  let rafId;
 
-    (async () => {
-      // load script if needed
-      if (!window.faceapi) {
-        await new Promise((resolve) => {
-          const script = document.createElement("script");
-          script.src = FACE_API_URL;
-          script.onload = resolve;
-          document.body.appendChild(script);
-        });
+  (async () => {
+    // Load face-api script if needed
+    if (!window.faceapi) {
+      await new Promise((resolve) => {
+        const script = document.createElement("script");
+        script.src = FACE_API_URL;
+        script.onload = resolve;
+        document.body.appendChild(script);
+      });
+    }
+
+    const faceapi = window.faceapi;
+    const MODEL_URI =
+      "https://justadudewhohacks.github.io/face-api.js/models";
+    await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URI);
+    await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URI);
+    await faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URI);
+    setModelsLoaded(true);
+
+    // Start camera
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
       }
+    } catch (err) {
+      console.warn("Camera permission denied or unavailable:", err);
+      return;
+    }
 
-      const faceapi = window.faceapi;
-      // Load models
-      const MODEL_URI =
-        "https://justadudewhohacks.github.io/face-api.js/models";
-      await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URI);
-      await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URI);
-      await faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URI);
-      setModelsLoaded(true);
-
-      // Start cam
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-        }
-      } catch (err) {
-        console.warn("Camera permission denied or not available:", err);
-        // No camera, just skip detection.
+    const detectLoop = async () => {
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      if (!video || !canvas) {
+        rafId = requestAnimationFrame(detectLoop);
         return;
       }
 
-      const detectLoop = async () => {
-        const video = videoRef.current;
-        const canvas = canvasRef.current;
-        if (!video || !canvas) {
-          rafId = requestAnimationFrame(detectLoop);
-          return;
-        }
+      const W = 320;
+      const H = 240;
+      if (canvas.width !== W) canvas.width = W;
+      if (canvas.height !== H) canvas.height = H;
 
-        // Ensure dimensions
-        const W = 320;
-        const H = 240;
-        if (canvas.width !== W) canvas.width = W;
-        if (canvas.height !== H) canvas.height = H;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(video, 0, 0, W, H);
 
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(video, 0, 0, W, H);
-
-        try {
-          const detection = await faceapi
-            .detectSingleFace(
-              video,
-              new faceapi.TinyFaceDetectorOptions({ inputSize: 224 })
-            )
-            .withFaceLandmarks()
-            .withFaceExpressions();
-
-          if (detection?.expressions) {
-            const [emotion, conf] = Object.entries(
-              detection.expressions
-            ).reduce((a, b) => (a[1] > b[1] ? a : b));
-            setLastEmotion(emotion);
-            setLastConfidence(conf);
-
-            // Only log if confidence meaningful and not neutral noise
-            if (conf >= 0.6) {
-              const ts = Date.now();
-              setEmotionEvents((prev) => [
-                ...prev,
-                { emotion, confidence: conf, ts },
-              ]);
-            }
-          }
-        } catch {}
-
-        rafId = requestAnimationFrame(detectLoop);
-      };
-
-      videoRef.current.onloadeddata = () => {
-        rafId = requestAnimationFrame(detectLoop);
-      };
-    })();
-
-    return () => {
-      if (rafId) cancelAnimationFrame(rafId);
       try {
-        if (stream) stream.getTracks().forEach((t) => t.stop());
-      } catch {
-        console.log("Error stopping video stream");
-      }
+        const detection = await faceapi
+          .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 224 }))
+          .withFaceLandmarks()
+          .withFaceExpressions();
+
+        if (detection?.expressions) {
+          const [emotion, conf] = Object.entries(detection.expressions)
+            .reduce((a, b) => (a[1] > b[1] ? a : b));
+          setLastEmotion(emotion);
+          setLastConfidence(conf);
+
+          if (conf >= 0.6) {
+            const ts = Date.now();
+            setEmotionEvents((prev) => [...prev, { emotion, confidence: conf, ts }]);
+          }
+        }
+      } catch {}
+
+      rafId = requestAnimationFrame(detectLoop);
     };
-  }, []);
+
+    // Only attach onloadeddata if videoRef.current exists
+    const video = videoRef.current;
+    if (video) {
+      video.onloadeddata = () => {
+        rafId = requestAnimationFrame(detectLoop);
+      };
+    }
+  })();
+
+  return () => {
+    if (rafId) cancelAnimationFrame(rafId);
+    try {
+      if (stream) stream.getTracks().forEach((t) => t.stop());
+    } catch {
+      console.log("Error stopping video stream");
+    }
+  };
+}, []);
 
   // ==== Chat sending via Gemini 1.5 (friend/therapist tone) ====
   const sendMessage = async () => {
