@@ -148,3 +148,42 @@
 .card-link:hover {
   background: #4338ca;
 }
+
+/* Charts Section */
+.charts-section {
+  margin-top: 2.5rem;
+}
+
+.charts-section h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 1.5rem;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.chart-card {
+  background: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.2s;
+  height: 300px; /* add a fixed height */
+}
+
+.chart-card:hover {
+  transform: translateY(-2px);
+}
+
+.chart-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 1rem;
+}

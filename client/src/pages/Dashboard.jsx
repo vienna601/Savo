@@ -8,6 +8,14 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 import "../styles/Dashboard.css";
 
 const Dashboard = () => {
@@ -16,6 +24,64 @@ const Dashboard = () => {
   const handleLogout = () => {
     logout({ returnTo: window.location.origin });
   };
+
+  // Example data — replace later with your actual emotion averages
+  const dailyData = [
+    { name: "Happy", value: 35 },
+    { name: "Sad", value: 25 },
+    { name: "Angry", value: 10 },
+    { name: "Fearful", value: 15 },
+    { name: "Neutral", value: 15 },
+  ];
+
+  const weeklyData = [
+    { name: "Happy", value: 40 },
+    { name: "Sad", value: 20 },
+    { name: "Angry", value: 15 },
+    { name: "Fearful", value: 10 },
+    { name: "Neutral", value: 15 },
+  ];
+
+  const monthlyData = [
+    { name: "Happy", value: 45 },
+    { name: "Sad", value: 15 },
+    { name: "Angry", value: 10 },
+    { name: "Fearful", value: 10 },
+    { name: "Neutral", value: 20 },
+  ];
+
+  const COLORS = ["#4CAF50", "#2196F3", "#FFC107", "#F44336", "#9E9E9E"];
+
+  const renderPieChart = (title, data) => (
+    <div className="chart-card">
+      <h3>{title}</h3>
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart>
+          <Pie
+            data={data}
+            cx="50%"
+            cy="50%"
+            labelLine={false}
+            outerRadius={80}
+            fill="#8884d8"
+            dataKey="value"
+            label={({ name, percent }) =>
+              `${name} ${(percent * 100).toFixed(0)}%`
+            }
+          >
+            {data.map((entry, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={COLORS[index % COLORS.length]}
+              />
+            ))}
+          </Pie>
+          <Tooltip />
+          <Legend />
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
+  );
 
   return (
     <div className="dashboard">
@@ -97,6 +163,16 @@ const Dashboard = () => {
             </a>
           </div>
         </div>
+
+        {/* Pie Charts Section */}
+        <section className="charts-section">
+          <h2>Emotional Insights</h2>
+          <div className="charts-grid">
+            {renderPieChart("Daily Emotions", dailyData)}
+            {renderPieChart("Weekly Emotions", weeklyData)}
+            {renderPieChart("Monthly Emotions", monthlyData)}
+          </div>
+        </section>
       </main>
     </div>
   );
