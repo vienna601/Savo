@@ -352,11 +352,11 @@ export default function TherapistRobot() {
           >
             <span>Home</span>
           </Link>
-          <Link
-            to="/chat"
-            className={`nav-item ${location.pathname === "/chat" ? "active" : ""}`}
-          >
+          <Link to="/chat" className={`nav-item ${location.pathname === "/chat" ? "active" : ""}`}>
             <span>Chat</span>
+          </Link>
+          <Link to="/resources" className={`nav-item ${location.pathname === "/resources" ? "active" : ""}`}>
+            <span>Resources</span>
           </Link>
         </nav>
         <button onClick={handleLogout} className="logout-btn">
