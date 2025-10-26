@@ -18,7 +18,7 @@ import {
 // ==== CONFIG ====
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 const GEMINI_URL =
-  "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent";
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
 // face-api.js (loaded dynamically)
 const FACE_API_URL =
@@ -215,37 +215,36 @@ export default function TherapistRobot() {
     const systemTone = buildTherapistSystemPrompt(lastEmotion, lastConfidence);
 
     try {
+      if (!GEMINI_API_KEY) {
+        throw new Error("Missing API key");
+      }
+
+      console.log("Making request to:", GEMINI_URL);
+
       const res = await fetch(`${GEMINI_URL}?key=${GEMINI_API_KEY}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
-          model: "gemini-1.0-pro",
           contents: [
             {
               role: "user",
-              parts: [{ text: systemTone }],
-            },
-            {
-              role: "model",
-              parts: [
-                { text: "I understand. I'll adapt my responses accordingly." },
-              ],
-            },
-            {
-              role: "user",
-              parts: [
-                {
-                  text: `${text}\n\nRespond in a warm, compact paragraph (1–3 sentences). Use everyday language. Avoid clinical jargon. If suggesting an action, keep it tiny and doable in one step.`,
-                },
-              ],
+              parts: [{ text }],
             },
           ],
           generationConfig: {
             temperature: 0.7,
-            maxOutputTokens: 10000,
+            maxOutputTokens: 2048,
           },
         }),
       });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        console.error("Gemini API error:", errorData);
+        throw new Error(errorData.error?.message || `HTTP error ${res.status}`);
+      }
 
       const data = await res.json();
       const reply =
