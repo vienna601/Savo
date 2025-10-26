@@ -1,0 +1,28 @@
+.emotion-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center everything nicely */
+  gap: 16px; /* space between elements */
+  padding-top: 20px;
+}
+
+.camera-wrapper {
+  position: relative; /* video + canvas stack together */
+  width: 640px;
+  height: 480px;
+}
+
+.camera-wrapper video,
+.camera-wrapper canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.camera-wrapper video {
+  z-index: 1;
+}
+
+.camera-wrapper canvas {
+  z-index: 2; /* overlays bounding box drawings */
+}
