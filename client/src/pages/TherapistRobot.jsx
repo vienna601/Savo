@@ -18,7 +18,7 @@ import {
 // ==== CONFIG ====
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 const GEMINI_URL =
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
+  "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent";
 
 // face-api.js (loaded dynamically)
 const FACE_API_URL =
@@ -193,79 +193,85 @@ export default function TherapistRobot() {
 
   // ==== Chat sending via Gemini 1.5 (friend/therapist tone) ====
   const sendMessage = async () => {
-    const text = input.trim();
-    if (!text) return;
+  const text = input.trim();
+  if (!text) return;
 
-    const userMsg = { sender: "user", text, ts: Date.now() };
-    setMessages((m) => [...m, userMsg]);
-    setInput("");
-    setTyping(true);
+  const userMsg = { sender: "user", text, ts: Date.now() };
+  setMessages((m) => [...m, userMsg]);
+  setInput("");
+  setTyping(true);
 
-    // lightweight sentiment signal from text for logging as well
-    const simpleSentiment = deriveTextEmotion(text);
+  const simpleSentiment = deriveTextEmotion(text);
+  if (simpleSentiment) {
+    setEmotionEvents((prev) => [
+      ...prev,
+      { emotion: simpleSentiment, confidence: 0.7, ts: Date.now() },
+    ]);
+  }
 
-    // log a synthetic event from text to support charts if camera is off
-    if (simpleSentiment) {
-      setEmotionEvents((prev) => [
-        ...prev,
-        { emotion: simpleSentiment, confidence: 0.7, ts: Date.now() },
-      ]);
-    }
+    const systemTone = buildTherapistSystemPrompt(lastEmotion, lastConfidence);
 
     try {
-      if (!GEMINI_API_KEY) {
-        throw new Error("Missing API key");
-      }
-
-      console.log("Making request to:", GEMINI_URL);
-
       const res = await fetch(`${GEMINI_URL}?key=${GEMINI_API_KEY}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          model: "gemini-1.0-pro",
           contents: [
             {
               role: "user",
-              parts: [{ text }],
+              parts: [{ text: systemTone }],
+            },
+            {
+              role: "model",
+              parts: [
+                { text: "I understand. I'll adapt my responses accordingly." },
+              ],
+            },
+            {
+              role: "user",
+              parts: [
+                {
+                  text: `${text}\n\nRespond in a warm, compact paragraph (1–3 sentences). Use everyday language. Avoid clinical jargon. If suggesting an action, keep it tiny and doable in one step.`,
+                },
+              ],
             },
           ],
           generationConfig: {
             temperature: 0.7,
-            maxOutputTokens: 2048,
+            maxOutputTokens: 10000,
           },
         }),
       });
 
-      if (!res.ok) {
-        const errorData = await res.json();
-        console.error("Gemini API error:", errorData);
-        throw new Error(errorData.error?.message || `HTTP error ${res.status}`);
-      }
+    const data = await res.json();
+    console.log("Gemini raw:", data);
 
-      const data = await res.json();
-      const reply =
-        data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-        "i'm here with you. let’s take one small step — can we try one deep breath together right now? 🌿";
-
-      setMessages((m) => [
-        ...m,
-        { sender: "bot", text: reply, ts: Date.now() },
-      ]);
-    } catch (err) {
-      setMessages((m) => [
-        ...m,
-        {
-          sender: "bot",
-          text: "hmm, i'm having trouble reaching my brain right now 😅 could you try again in a moment?",
-          ts: Date.now(),
-        },
-      ]);
-    } finally {
-      setTyping(false);
+    if (!res.ok) {
+      throw new Error(
+        `Gemini API error: ${res.status} - ${JSON.stringify(data)}`
+      );
     }
-  };
+
+    const reply =
+      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+      "i'm here with you. let’s take one small step — can we try one deep breath together right now? 🌿";
+
+    setMessages((m) => [...m, { sender: "bot", text: reply, ts: Date.now() }]);
+  } catch (err) {
+    console.error("Gemini fetch failed:", err);
+    setMessages((m) => [
+      ...m,
+      {
+        sender: "bot",
+        text: "hmm, i'm having trouble reaching my brain right now 😅 could you try again in a moment?",
+        ts: Date.now(),
+      },
+    ]);
+  } finally {
+    setTyping(false);
+  }
+};
 
   // ==== Dashboard data (Daily / Weekly / Monthly) ====
   const now = Date.now();
