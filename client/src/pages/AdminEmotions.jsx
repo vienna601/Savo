@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { MessageCircle, Send, Smile, Heart, Brain } from "lucide-react";
-
+import EmotionGraph from "../components/EmotionGraph.jsx";
+import "../styles/AdminEmotions.css";
 // Face + Emotion Detection Component
 const FaceEmotionDetector = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const labelRef = useRef(null);
+  const [confidenceHistory, setConfidenceHistory] = useState([]);
 
   useEffect(() => {
     const loadModelsAndStart = async () => {
@@ -59,6 +61,11 @@ const FaceEmotionDetector = () => {
               (a, b) => (a[1] > b[1] ? a : b)
             );
             const [expression, confidence] = maxExp;
+            setConfidenceHistory((prev) => [
+              ...prev.slice(-200), // ✅ prevents memory explosion / keeps last 200 points
+              { time: Date.now(), expression, confidence },
+            ]);
+
             label.textContent = `${expression.toUpperCase()} (${(
               confidence * 100
             ).toFixed(1)}%)`;
@@ -92,8 +99,11 @@ const FaceEmotionDetector = () => {
       <div id="expressionLabel" ref={labelRef}>
         Loading models...
       </div>
+
       <video ref={videoRef} width="640" height="480" autoPlay muted></video>
       <canvas ref={canvasRef} width="640" height="480"></canvas>
+
+      <EmotionGraph data={confidenceHistory} />
     </div>
   );
 };
